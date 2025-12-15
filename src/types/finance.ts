@@ -47,7 +47,7 @@ export const BANCOS = [
   "C6 Bank",
   "Inter",
   "Santander",
-  "Original",
+  "Neon",
   "PicPay",
   "Outro",
 ] as const;
