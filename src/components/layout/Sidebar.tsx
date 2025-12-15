@@ -29,11 +29,11 @@ export function Sidebar() {
           className="group" 
           onClick={() => setMobileOpen(false)}
         >
-          <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 border border-primary/20 flex items-center justify-center transition-all duration-500 group-hover:scale-110 group-hover:border-primary/40 group-hover:shadow-xl group-hover:shadow-primary/20 overflow-hidden backdrop-blur-sm">
+          <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 border border-primary/20 flex items-center justify-center transition-all duration-500 group-hover:scale-110 group-hover:border-primary/40 group-hover:shadow-xl group-hover:shadow-primary/20 overflow-hidden backdrop-blur-sm">
             <img 
               src="/logo.png" 
               alt="Logo" 
-              className="h-10 w-10 object-contain"
+              className="w-[200%] h-[200%] object-cover scale-150"
             />
           </div>
         </Link>
@@ -99,7 +99,7 @@ export function Sidebar() {
       <header className="lg:hidden fixed top-0 left-0 right-0 h-16 bg-sidebar-background/95 backdrop-blur-xl border-b border-border/50 z-50 flex items-center justify-between px-5">
         <Link to="/dashboard" className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5 border border-primary/20 flex items-center justify-center overflow-hidden">
-            <img src="/logo.png" alt="Logo" className="h-6 w-6 object-contain" />
+            <img src="/logo.png" alt="Logo" className="w-[200%] h-[200%] object-cover scale-150" />
           </div>
         </Link>
         <Button
