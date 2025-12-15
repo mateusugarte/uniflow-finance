@@ -4,6 +4,7 @@ import { format, getDaysInMonth, parseISO, startOfMonth, endOfMonth, eachDayOfIn
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "./AuthContext";
+import { useUserSwitch } from "./UserSwitchContext";
 
 interface FinanceContextType {
   operations: Operation[];
@@ -26,12 +27,13 @@ const FinanceContext = createContext<FinanceContextType | null>(null);
 
 export function FinanceProvider({ children }: { children: ReactNode }) {
   const { user } = useAuth();
+  const { selectedUserId } = useUserSwitch();
   const [operations, setOperations] = useState<Operation[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedMonth, setSelectedMonth] = useState(new Date());
 
   const fetchOperations = useCallback(async () => {
-    if (!user) {
+    if (!user || !selectedUserId) {
       setOperations([]);
       return;
     }
@@ -41,7 +43,7 @@ export function FinanceProvider({ children }: { children: ReactNode }) {
       const { data, error } = await supabase
         .from("operacoes")
         .select("*")
-        .eq("user_id", user.id)
+        .eq("user_id", selectedUserId)
         .order("data", { ascending: false })
         .order("hora", { ascending: false });
 
@@ -68,14 +70,14 @@ export function FinanceProvider({ children }: { children: ReactNode }) {
     } finally {
       setIsLoading(false);
     }
-  }, [user]);
+  }, [user, selectedUserId]);
 
   useEffect(() => {
     fetchOperations();
   }, [fetchOperations]);
 
   const addOperation = useCallback(async (data: OperationFormData) => {
-    if (!user) {
+    if (!user || !selectedUserId) {
       toast.error("Você precisa estar logado");
       return;
     }
@@ -83,7 +85,7 @@ export function FinanceProvider({ children }: { children: ReactNode }) {
     setIsLoading(true);
     try {
       const { error } = await supabase.from("operacoes").insert({
-        user_id: user.id,
+        user_id: selectedUserId,
         tipo: data.tipo,
         valor: data.valor,
         descricao: data.descricao,
@@ -107,10 +109,10 @@ export function FinanceProvider({ children }: { children: ReactNode }) {
     } finally {
       setIsLoading(false);
     }
-  }, [user, fetchOperations]);
+  }, [user, selectedUserId, fetchOperations]);
 
   const updateOperation = useCallback(async (id: string, data: Partial<OperationFormData>) => {
-    if (!user) return;
+    if (!user || !selectedUserId) return;
 
     setIsLoading(true);
     try {
@@ -121,7 +123,7 @@ export function FinanceProvider({ children }: { children: ReactNode }) {
           updated_at: new Date().toISOString(),
         })
         .eq("id", id)
-        .eq("user_id", user.id);
+        .eq("user_id", selectedUserId);
 
       if (error) throw error;
 
@@ -133,10 +135,10 @@ export function FinanceProvider({ children }: { children: ReactNode }) {
     } finally {
       setIsLoading(false);
     }
-  }, [user, fetchOperations]);
+  }, [user, selectedUserId, fetchOperations]);
 
   const deleteOperation = useCallback(async (id: string) => {
-    if (!user) return;
+    if (!user || !selectedUserId) return;
 
     setIsLoading(true);
     try {
@@ -144,7 +146,7 @@ export function FinanceProvider({ children }: { children: ReactNode }) {
         .from("operacoes")
         .delete()
         .eq("id", id)
-        .eq("user_id", user.id);
+        .eq("user_id", selectedUserId);
 
       if (error) throw error;
 
@@ -156,7 +158,7 @@ export function FinanceProvider({ children }: { children: ReactNode }) {
     } finally {
       setIsLoading(false);
     }
-  }, [user, fetchOperations]);
+  }, [user, selectedUserId, fetchOperations]);
 
   const getOperationsByMonth = useCallback((year: number, month: number): Operation[] => {
     return operations
