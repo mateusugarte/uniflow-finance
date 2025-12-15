@@ -95,7 +95,10 @@ export function Sidebar() {
         {/* User Switcher */}
         <Popover open={userPopoverOpen} onOpenChange={setUserPopoverOpen}>
           <PopoverTrigger asChild>
-            <button className="w-full px-3 py-3 mb-3 rounded-xl bg-secondary/50 border border-border/50 hover:bg-secondary/70 transition-colors text-left">
+            <button 
+              type="button"
+              className="w-full px-3 py-3 mb-3 rounded-xl bg-secondary/50 border border-border/50 hover:bg-secondary/70 transition-colors text-left cursor-pointer"
+            >
               <div className="flex items-center gap-3">
                 <div className="w-9 h-9 rounded-lg bg-primary/20 flex items-center justify-center flex-shrink-0">
                   <User className="h-4 w-4 text-primary" />
@@ -104,40 +107,53 @@ export function Sidebar() {
                   <p className="text-sm font-medium text-foreground truncate">{displayName}</p>
                   <p className="text-xs text-muted-foreground truncate">{displayEmail}</p>
                 </div>
-                <ChevronDown className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+                <ChevronDown className={cn(
+                  "h-4 w-4 text-muted-foreground flex-shrink-0 transition-transform duration-200",
+                  userPopoverOpen && "rotate-180"
+                )} />
               </div>
               <p className="text-xs text-primary mt-2 pl-12">Trocar usuário</p>
             </button>
           </PopoverTrigger>
-          <PopoverContent className="w-64 p-2" align="start" side="top">
+          <PopoverContent 
+            className="w-64 p-2 z-[100]" 
+            align="start" 
+            side="top"
+            sideOffset={8}
+          >
             <p className="text-xs font-medium text-muted-foreground px-2 py-1 mb-1">Selecione um usuário</p>
-            <div className="max-h-[200px] overflow-y-auto space-y-1">
-              {allUsers.map((userProfile) => (
-                <button
-                  key={userProfile.id}
-                  onClick={() => handleSwitchUser(userProfile.id)}
-                  className={cn(
-                    "w-full flex items-center gap-3 px-2 py-2 rounded-lg text-left transition-colors",
-                    selectedUserId === userProfile.id
-                      ? "bg-primary/10 text-primary"
-                      : "hover:bg-accent text-foreground"
-                  )}
-                >
-                  <div className="w-7 h-7 rounded-md bg-secondary flex items-center justify-center flex-shrink-0">
-                    <User className="h-3.5 w-3.5" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium truncate">
-                      {userProfile.nome || userProfile.email?.split("@")[0]}
-                    </p>
-                    <p className="text-xs text-muted-foreground truncate">{userProfile.email}</p>
-                  </div>
-                  {selectedUserId === userProfile.id && (
-                    <Check className="h-4 w-4 text-primary flex-shrink-0" />
-                  )}
-                </button>
-              ))}
-            </div>
+            {allUsers.length === 0 ? (
+              <p className="text-sm text-muted-foreground px-2 py-2">Carregando usuários...</p>
+            ) : (
+              <div className="max-h-[200px] overflow-y-auto space-y-1">
+                {allUsers.map((userProfile) => (
+                  <button
+                    key={userProfile.id}
+                    type="button"
+                    onClick={() => handleSwitchUser(userProfile.id)}
+                    className={cn(
+                      "w-full flex items-center gap-3 px-2 py-2 rounded-lg text-left transition-colors cursor-pointer",
+                      selectedUserId === userProfile.id
+                        ? "bg-primary/10 text-primary"
+                        : "hover:bg-accent text-foreground"
+                    )}
+                  >
+                    <div className="w-7 h-7 rounded-md bg-secondary flex items-center justify-center flex-shrink-0">
+                      <User className="h-3.5 w-3.5" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium truncate">
+                        {userProfile.nome || userProfile.email?.split("@")[0]}
+                      </p>
+                      <p className="text-xs text-muted-foreground truncate">{userProfile.email}</p>
+                    </div>
+                    {selectedUserId === userProfile.id && (
+                      <Check className="h-4 w-4 text-primary flex-shrink-0" />
+                    )}
+                  </button>
+                ))}
+              </div>
+            )}
           </PopoverContent>
         </Popover>
 
