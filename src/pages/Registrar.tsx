@@ -5,7 +5,6 @@ import { OperationType, BANCOS } from "@/types/finance";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
   Select,
   SelectContent,
@@ -29,7 +28,6 @@ export default function Registrar() {
     banco: "",
     data: format(new Date(), "yyyy-MM-dd"),
     hora: format(new Date(), "HH:mm"),
-    isVenda: false,
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
 
@@ -76,7 +74,6 @@ export default function Registrar() {
       banco: formData.banco,
       data: formData.data,
       hora: formData.hora,
-      is_venda: tipo === 'saida' ? formData.isVenda : false,
     });
 
     // Reset form
@@ -88,7 +85,6 @@ export default function Registrar() {
       banco: "",
       data: format(new Date(), "yyyy-MM-dd"),
       hora: format(new Date(), "HH:mm"),
-      isVenda: false,
     });
   };
 
@@ -106,6 +102,42 @@ export default function Registrar() {
     return cleaned;
   };
 
+  const getTypeConfig = () => {
+    switch (tipo) {
+      case "entrada":
+        return {
+          bgClass: "bg-income/20 border border-income/30",
+          iconClass: "text-income",
+          textClass: "text-income",
+          icon: ArrowUpCircle,
+          label: "Nova Entrada",
+          buttonVariant: "income" as const,
+        };
+      case "saida":
+        return {
+          bgClass: "bg-expense/20 border border-expense/30",
+          iconClass: "text-expense",
+          textClass: "text-expense",
+          icon: ArrowDownCircle,
+          label: "Nova Saída",
+          buttonVariant: "expense" as const,
+        };
+      case "venda":
+        return {
+          bgClass: "bg-orange-500/20 border border-orange-500/30",
+          iconClass: "text-orange-500",
+          textClass: "text-orange-500",
+          icon: ShoppingBag,
+          label: "Nova Venda",
+          buttonVariant: "default" as const,
+        };
+      default:
+        return null;
+    }
+  };
+
+  const typeConfig = getTypeConfig();
+
   return (
     <div className="max-w-2xl mx-auto">
       {/* Header */}
@@ -116,14 +148,14 @@ export default function Registrar() {
         <div>
           <h1 className="text-2xl font-bold text-foreground">Registrar Operação</h1>
           <p className="text-muted-foreground text-sm mt-1">
-            {step === 1 ? "Selecione o tipo de operação" : `Registrar ${tipo === "entrada" ? "Entrada" : "Saída"}`}
+            {step === 1 ? "Selecione o tipo de operação" : `Registrar ${tipo === "entrada" ? "Entrada" : tipo === "saida" ? "Saída" : "Venda"}`}
           </p>
         </div>
       </div>
 
       {/* Step 1: Select Type */}
       {step === 1 && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 animate-slide-up">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 animate-slide-up">
           <button
             onClick={() => handleSelectType("entrada")}
             className="group relative overflow-hidden rounded-xl p-6 bg-income/15 border border-income/30 text-foreground transition-all duration-300 hover:scale-[1.02] hover:bg-income/25 hover:border-income/50"
@@ -153,28 +185,31 @@ export default function Registrar() {
               </div>
             </div>
           </button>
+
+          <button
+            onClick={() => handleSelectType("venda")}
+            className="group relative overflow-hidden rounded-xl p-6 bg-orange-500/15 border border-orange-500/30 text-foreground transition-all duration-300 hover:scale-[1.02] hover:bg-orange-500/25 hover:border-orange-500/50"
+          >
+            <div className="relative z-10 flex flex-col items-center gap-3">
+              <div className="p-3 rounded-xl bg-orange-500 text-white">
+                <ShoppingBag className="h-8 w-8" />
+              </div>
+              <div className="text-center">
+                <h3 className="text-xl font-bold text-orange-500">Venda</h3>
+                <p className="text-sm text-muted-foreground mt-1">Empréstimo / Venda</p>
+              </div>
+            </div>
+          </button>
         </div>
       )}
 
       {/* Step 2: Form */}
-      {step === 2 && tipo && (
+      {step === 2 && tipo && typeConfig && (
         <form onSubmit={handleSubmit} className="space-y-5 animate-slide-up">
-          <div
-            className={cn(
-              "rounded-xl p-4 mb-4 flex items-center gap-3",
-              tipo === "entrada" ? "bg-income/20 border border-income/30" : "bg-expense/20 border border-expense/30"
-            )}
-          >
-            {tipo === "entrada" ? (
-              <ArrowUpCircle className="h-5 w-5 text-income" />
-            ) : (
-              <ArrowDownCircle className="h-5 w-5 text-expense" />
-            )}
-            <span className={cn(
-              "font-semibold",
-              tipo === "entrada" ? "text-income" : "text-expense"
-            )}>
-              {tipo === "entrada" ? "Nova Entrada" : "Nova Saída"}
+          <div className={cn("rounded-xl p-4 mb-4 flex items-center gap-3", typeConfig.bgClass)}>
+            <typeConfig.icon className={cn("h-5 w-5", typeConfig.iconClass)} />
+            <span className={cn("font-semibold", typeConfig.textClass)}>
+              {typeConfig.label}
             </span>
           </div>
 
@@ -296,29 +331,6 @@ export default function Registrar() {
                 />
               </div>
             </div>
-
-            {/* Checkbox Venda - apenas para saídas */}
-            {tipo === 'saida' && (
-              <div className="flex items-center space-x-3 p-4 rounded-xl bg-orange-500/10 border border-orange-500/30">
-                <Checkbox
-                  id="isVenda"
-                  checked={formData.isVenda}
-                  onCheckedChange={(checked) =>
-                    setFormData({ ...formData, isVenda: checked === true })
-                  }
-                  className="border-orange-500 data-[state=checked]:bg-orange-500 data-[state=checked]:border-orange-500"
-                />
-                <div className="flex items-center gap-2">
-                  <ShoppingBag className="h-4 w-4 text-orange-500" />
-                  <Label
-                    htmlFor="isVenda"
-                    className="text-sm font-medium text-foreground cursor-pointer"
-                  >
-                    Esta saída é uma venda
-                  </Label>
-                </div>
-              </div>
-            )}
           </div>
 
           {/* Submit Buttons */}
@@ -334,9 +346,12 @@ export default function Registrar() {
             </Button>
             <Button
               type="submit"
-              variant={tipo === "entrada" ? "income" : "expense"}
+              variant={typeConfig.buttonVariant}
               size="lg"
-              className="flex-1"
+              className={cn(
+                "flex-1",
+                tipo === "venda" && "bg-orange-500 hover:bg-orange-600 text-white"
+              )}
               disabled={isLoading}
             >
               {isLoading ? (
@@ -347,7 +362,7 @@ export default function Registrar() {
               ) : (
                 <>
                   <Check className="h-4 w-4" />
-                  Registrar {tipo === "entrada" ? "Entrada" : "Saída"}
+                  Registrar {tipo === "entrada" ? "Entrada" : tipo === "saida" ? "Saída" : "Venda"}
                 </>
               )}
             </Button>

@@ -1,4 +1,4 @@
-export type OperationType = "entrada" | "saida";
+export type OperationType = "entrada" | "saida" | "venda";
 
 export interface Operation {
   id: string;
@@ -9,7 +9,6 @@ export interface Operation {
   banco: string;
   data: string;
   hora: string;
-  is_venda: boolean;
   created_at: string;
   updated_at: string;
 }
@@ -21,15 +20,17 @@ export interface OperationFormData {
   banco: string;
   data: string;
   hora: string;
-  is_venda?: boolean;
 }
 
 export interface MonthlyStats {
   totalEntradas: number;
   totalSaidas: number;
+  totalVendas: number;
   saldoLiquido: number;
+  saldoSemVenda: number;
   maiorEntrada: Operation | null;
   maiorSaida: Operation | null;
+  maiorVenda: Operation | null;
   mediaGastoDiario: number;
   taxaEconomia: number;
   totalOperacoes: number;

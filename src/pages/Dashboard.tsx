@@ -32,21 +32,20 @@ export default function Dashboard() {
   } = useFinance();
 
   const [periodFilter, setPeriodFilter] = useState<PeriodFilterValue>(getDefaultPeriodFilter());
-  const [detailsDialog, setDetailsDialog] = useState<{ open: boolean; type: 'entrada' | 'saida' | null }>({ open: false, type: null });
+  const [detailsDialog, setDetailsDialog] = useState<{ open: boolean; type: 'entrada' | 'saida' | 'venda' | null }>({ open: false, type: null });
 
   const stats = getStatsByPeriod(periodFilter.startDate, periodFilter.endDate);
   const operations = getOperationsByPeriod(periodFilter.startDate, periodFilter.endDate);
   const dailyBalances = getDailyBalancesByPeriod(periodFilter.startDate, periodFilter.endDate);
 
   const entradas = operations.filter(op => op.tipo === 'entrada');
-  const saidas = operations.filter(op => op.tipo === 'saida' && !op.is_venda);
-  const vendas = operations.filter(op => op.tipo === 'saida' && op.is_venda);
-  const totalSaidasSemVendas = saidas.reduce((sum, op) => sum + op.valor, 0);
-  const totalVendas = vendas.reduce((sum, op) => sum + op.valor, 0);
+  const saidas = operations.filter(op => op.tipo === 'saida');
+  const vendas = operations.filter(op => op.tipo === 'venda');
 
   const getFilteredOperations = () => {
     if (detailsDialog.type === 'entrada') return entradas;
-    if (detailsDialog.type === 'saida') return saidas; // já filtrado sem vendas
+    if (detailsDialog.type === 'saida') return saidas;
+    if (detailsDialog.type === 'venda') return vendas;
     return [];
   };
 
@@ -67,7 +66,7 @@ export default function Dashboard() {
       </div>
 
       {/* Main Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         <div 
           onClick={() => setDetailsDialog({ open: true, type: 'entrada' })}
           className="cursor-pointer transition-transform hover:scale-[1.02]"
@@ -87,28 +86,45 @@ export default function Dashboard() {
         >
           <StatCard
             title="Total de Saídas"
-            value={formatCurrency(totalSaidasSemVendas)}
+            value={formatCurrency(stats.totalSaidas)}
             subtitle={`${saidas.length} operações • Clique para ver detalhes`}
             icon={TrendingDown}
             variant="expense"
             delay={100}
           />
         </div>
+        <div 
+          onClick={() => setDetailsDialog({ open: true, type: 'venda' })}
+          className="cursor-pointer transition-transform hover:scale-[1.02]"
+        >
+          <StatCard
+            title="Vendas (Empréstimos)"
+            value={formatCurrency(stats.totalVendas)}
+            subtitle={`${vendas.length} vendas • Clique para ver detalhes`}
+            icon={ShoppingBag}
+            variant="sales"
+            delay={150}
+          />
+        </div>
+      </div>
+
+      {/* Balance Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <StatCard
-          title="Vendas"
-          value={formatCurrency(totalVendas)}
-          subtitle={`${vendas.length} vendas no período`}
-          icon={ShoppingBag}
-          variant="sales"
-          delay={150}
-        />
-        <StatCard
-          title="Saldo Líquido"
-          value={formatCurrency(stats.saldoLiquido)}
-          subtitle={`Taxa de economia: ${formatPercent(stats.taxaEconomia)}`}
+          title="Saldo Sem Venda"
+          value={formatCurrency(stats.saldoSemVenda)}
+          subtitle="Entradas - Saídas"
           icon={Wallet}
           variant="balance"
           delay={200}
+        />
+        <StatCard
+          title="Saldo Com Venda"
+          value={formatCurrency(stats.saldoLiquido)}
+          subtitle="Entradas - Saídas - Vendas"
+          icon={Wallet}
+          variant="default"
+          delay={250}
         />
       </div>
 
@@ -176,6 +192,11 @@ export default function Dashboard() {
                   <TrendingUp className="h-5 w-5 text-finance-income" />
                   Detalhes das Entradas
                 </>
+              ) : detailsDialog.type === 'venda' ? (
+                <>
+                  <ShoppingBag className="h-5 w-5 text-orange-500" />
+                  Detalhes das Vendas
+                </>
               ) : (
                 <>
                   <TrendingDown className="h-5 w-5 text-finance-expense" />
@@ -204,8 +225,20 @@ export default function Dashboard() {
               <span className="text-sm text-muted-foreground">
                 {getFilteredOperations().length} operações
               </span>
-              <span className={`font-semibold ${detailsDialog.type === 'entrada' ? 'text-finance-income' : 'text-finance-expense'}`}>
-                Total: {formatCurrency(detailsDialog.type === 'entrada' ? stats.totalEntradas : totalSaidasSemVendas)}
+              <span className={`font-semibold ${
+                detailsDialog.type === 'entrada' 
+                  ? 'text-finance-income' 
+                  : detailsDialog.type === 'venda' 
+                    ? 'text-orange-500' 
+                    : 'text-finance-expense'
+              }`}>
+                Total: {formatCurrency(
+                  detailsDialog.type === 'entrada' 
+                    ? stats.totalEntradas 
+                    : detailsDialog.type === 'venda'
+                      ? stats.totalVendas
+                      : stats.totalSaidas
+                )}
               </span>
             </div>
           </div>

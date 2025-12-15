@@ -52,13 +52,12 @@ export function FinanceProvider({ children }: { children: ReactNode }) {
       const formattedData: Operation[] = (data || []).map((op) => ({
         id: op.id,
         user_id: op.user_id,
-        tipo: op.tipo as "entrada" | "saida",
+        tipo: op.tipo as "entrada" | "saida" | "venda",
         valor: Number(op.valor),
         descricao: op.descricao,
         banco: op.banco,
         data: op.data,
         hora: op.hora,
-        is_venda: op.is_venda ?? false,
         created_at: op.created_at,
         updated_at: op.updated_at,
       }));
@@ -92,17 +91,18 @@ export function FinanceProvider({ children }: { children: ReactNode }) {
         banco: data.banco,
         data: data.data,
         hora: data.hora,
-        is_venda: data.is_venda ?? false,
       });
 
       if (error) throw error;
 
       await fetchOperations();
-      toast.success(
-        data.tipo === "entrada"
-          ? "Entrada registrada com sucesso!"
-          : "Saída registrada com sucesso!"
-      );
+      
+      const messages = {
+        entrada: "Entrada registrada com sucesso!",
+        saida: "Saída registrada com sucesso!",
+        venda: "Venda registrada com sucesso!"
+      };
+      toast.success(messages[data.tipo]);
     } catch (error) {
       console.error("Error adding operation:", error);
       toast.error("Erro ao registrar operação");
@@ -178,10 +178,16 @@ export function FinanceProvider({ children }: { children: ReactNode }) {
 
     const entradas = monthOps.filter((op) => op.tipo === "entrada");
     const saidas = monthOps.filter((op) => op.tipo === "saida");
+    const vendas = monthOps.filter((op) => op.tipo === "venda");
 
     const totalEntradas = entradas.reduce((sum, op) => sum + op.valor, 0);
     const totalSaidas = saidas.reduce((sum, op) => sum + op.valor, 0);
-    const saldoLiquido = totalEntradas - totalSaidas;
+    const totalVendas = vendas.reduce((sum, op) => sum + op.valor, 0);
+    
+    // Saldo líquido com venda: entradas - saídas - vendas (vendas são empréstimos que saem temporariamente)
+    const saldoLiquido = totalEntradas - totalSaidas - totalVendas;
+    // Saldo sem venda: entradas - saídas
+    const saldoSemVenda = totalEntradas - totalSaidas;
 
     const maiorEntrada = entradas.length > 0
       ? entradas.reduce((max, op) => op.valor > max.valor ? op : max)
@@ -189,6 +195,10 @@ export function FinanceProvider({ children }: { children: ReactNode }) {
 
     const maiorSaida = saidas.length > 0
       ? saidas.reduce((max, op) => op.valor > max.valor ? op : max)
+      : null;
+
+    const maiorVenda = vendas.length > 0
+      ? vendas.reduce((max, op) => op.valor > max.valor ? op : max)
       : null;
 
     const daysInMonth = getDaysInMonth(new Date(year, month));
@@ -201,9 +211,12 @@ export function FinanceProvider({ children }: { children: ReactNode }) {
     return {
       totalEntradas,
       totalSaidas,
+      totalVendas,
       saldoLiquido,
+      saldoSemVenda,
       maiorEntrada,
       maiorSaida,
+      maiorVenda,
       mediaGastoDiario,
       taxaEconomia,
       totalOperacoes: monthOps.length,
@@ -255,10 +268,16 @@ export function FinanceProvider({ children }: { children: ReactNode }) {
 
     const entradas = periodOps.filter((op) => op.tipo === "entrada");
     const saidas = periodOps.filter((op) => op.tipo === "saida");
+    const vendas = periodOps.filter((op) => op.tipo === "venda");
 
     const totalEntradas = entradas.reduce((sum, op) => sum + op.valor, 0);
     const totalSaidas = saidas.reduce((sum, op) => sum + op.valor, 0);
-    const saldoLiquido = totalEntradas - totalSaidas;
+    const totalVendas = vendas.reduce((sum, op) => sum + op.valor, 0);
+    
+    // Saldo líquido com venda: entradas - saídas - vendas
+    const saldoLiquido = totalEntradas - totalSaidas - totalVendas;
+    // Saldo sem venda: entradas - saídas
+    const saldoSemVenda = totalEntradas - totalSaidas;
 
     const maiorEntrada = entradas.length > 0
       ? entradas.reduce((max, op) => op.valor > max.valor ? op : max)
@@ -266,6 +285,10 @@ export function FinanceProvider({ children }: { children: ReactNode }) {
 
     const maiorSaida = saidas.length > 0
       ? saidas.reduce((max, op) => op.valor > max.valor ? op : max)
+      : null;
+
+    const maiorVenda = vendas.length > 0
+      ? vendas.reduce((max, op) => op.valor > max.valor ? op : max)
       : null;
 
     const daysInPeriod = differenceInDays(endDate, startDate) + 1;
@@ -278,9 +301,12 @@ export function FinanceProvider({ children }: { children: ReactNode }) {
     return {
       totalEntradas,
       totalSaidas,
+      totalVendas,
       saldoLiquido,
+      saldoSemVenda,
       maiorEntrada,
       maiorSaida,
+      maiorVenda,
       mediaGastoDiario,
       taxaEconomia,
       totalOperacoes: periodOps.length,

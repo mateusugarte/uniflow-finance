@@ -64,7 +64,6 @@ export type Database = {
           descricao: string
           hora: string
           id: string
-          is_venda: boolean
           tipo: string
           updated_at: string
           user_id: string
@@ -77,7 +76,6 @@ export type Database = {
           descricao: string
           hora?: string
           id?: string
-          is_venda?: boolean
           tipo: string
           updated_at?: string
           user_id: string
@@ -90,7 +88,6 @@ export type Database = {
           descricao?: string
           hora?: string
           id?: string
-          is_venda?: boolean
           tipo?: string
           updated_at?: string
           user_id?: string
