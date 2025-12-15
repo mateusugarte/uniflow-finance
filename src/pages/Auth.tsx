@@ -117,11 +117,13 @@ export default function Auth({ onLogin }: AuthPageProps) {
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="text-center mb-8 animate-fade-in">
-          <img
-            src="/logo.png"
-            alt="Uni Capital"
-            className="h-14 w-auto mx-auto mb-3"
-          />
+          <div className="w-24 h-24 mx-auto mb-4 rounded-full bg-card border border-border shadow-lg flex items-center justify-center">
+            <img
+              src="/logo.png"
+              alt="Uni Capital"
+              className="h-16 w-16 object-contain"
+            />
+          </div>
           <h1 className="text-xl font-semibold text-foreground">Uni Capital</h1>
         </div>
 
