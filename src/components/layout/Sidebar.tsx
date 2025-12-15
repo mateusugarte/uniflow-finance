@@ -1,10 +1,15 @@
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { LayoutDashboard, PlusCircle, History, LogOut, Menu, X, User } from "lucide-react";
+import { LayoutDashboard, PlusCircle, History, LogOut, Menu, X, User, ChevronDown, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
-import { supabase } from "@/integrations/supabase/client";
+import { useUserSwitch } from "@/contexts/UserSwitchContext";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
 const navItems = [
   { path: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -14,33 +19,22 @@ const navItems = [
 
 export function Sidebar() {
   const location = useLocation();
-  const { signOut, user } = useAuth();
+  const { signOut } = useAuth();
+  const { selectedUserProfile, allUsers, switchUser, selectedUserId } = useUserSwitch();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [profileName, setProfileName] = useState<string | null>(null);
-
-  useEffect(() => {
-    async function fetchProfile() {
-      if (user) {
-        const { data } = await supabase
-          .from("profiles")
-          .select("nome")
-          .eq("id", user.id)
-          .single();
-        
-        if (data?.nome) {
-          setProfileName(data.nome);
-        }
-      }
-    }
-    fetchProfile();
-  }, [user]);
+  const [userPopoverOpen, setUserPopoverOpen] = useState(false);
 
   const handleLogout = async () => {
     await signOut();
   };
 
-  const displayName = profileName || user?.user_metadata?.nome || user?.email?.split("@")[0] || "Usuário";
-  const displayEmail = user?.email || "";
+  const displayName = selectedUserProfile?.nome || selectedUserProfile?.email?.split("@")[0] || "Usuário";
+  const displayEmail = selectedUserProfile?.email || "";
+
+  const handleSwitchUser = (userId: string) => {
+    switchUser(userId);
+    setUserPopoverOpen(false);
+  };
 
   const SidebarContent = () => (
     <div className="flex flex-col h-full">
@@ -98,18 +92,54 @@ export function Sidebar() {
 
       {/* Footer with User Info */}
       <div className="p-4 mt-auto">
-        {/* User Info */}
-        <div className="px-3 py-3 mb-3 rounded-xl bg-secondary/50 border border-border/50">
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-lg bg-primary/20 flex items-center justify-center flex-shrink-0">
-              <User className="h-4 w-4 text-primary" />
+        {/* User Switcher */}
+        <Popover open={userPopoverOpen} onOpenChange={setUserPopoverOpen}>
+          <PopoverTrigger asChild>
+            <button className="w-full px-3 py-3 mb-3 rounded-xl bg-secondary/50 border border-border/50 hover:bg-secondary/70 transition-colors text-left">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-lg bg-primary/20 flex items-center justify-center flex-shrink-0">
+                  <User className="h-4 w-4 text-primary" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-foreground truncate">{displayName}</p>
+                  <p className="text-xs text-muted-foreground truncate">{displayEmail}</p>
+                </div>
+                <ChevronDown className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+              </div>
+              <p className="text-xs text-primary mt-2 pl-12">Trocar usuário</p>
+            </button>
+          </PopoverTrigger>
+          <PopoverContent className="w-64 p-2" align="start" side="top">
+            <p className="text-xs font-medium text-muted-foreground px-2 py-1 mb-1">Selecione um usuário</p>
+            <div className="max-h-[200px] overflow-y-auto space-y-1">
+              {allUsers.map((userProfile) => (
+                <button
+                  key={userProfile.id}
+                  onClick={() => handleSwitchUser(userProfile.id)}
+                  className={cn(
+                    "w-full flex items-center gap-3 px-2 py-2 rounded-lg text-left transition-colors",
+                    selectedUserId === userProfile.id
+                      ? "bg-primary/10 text-primary"
+                      : "hover:bg-accent text-foreground"
+                  )}
+                >
+                  <div className="w-7 h-7 rounded-md bg-secondary flex items-center justify-center flex-shrink-0">
+                    <User className="h-3.5 w-3.5" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium truncate">
+                      {userProfile.nome || userProfile.email?.split("@")[0]}
+                    </p>
+                    <p className="text-xs text-muted-foreground truncate">{userProfile.email}</p>
+                  </div>
+                  {selectedUserId === userProfile.id && (
+                    <Check className="h-4 w-4 text-primary flex-shrink-0" />
+                  )}
+                </button>
+              ))}
             </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-foreground truncate">{displayName}</p>
-              <p className="text-xs text-muted-foreground truncate">{displayEmail}</p>
-            </div>
-          </div>
-        </div>
+          </PopoverContent>
+        </Popover>
 
         <div className="mx-2 mb-4 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
         <Button
