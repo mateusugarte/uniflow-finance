@@ -2,104 +2,104 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 @layer base {
   :root {
-    /* Light mode - keeping for future toggle */
-    --primary: 215 80% 50%;
+    /* Refined dark theme - deeper and more sophisticated */
+    --primary: 220 70% 55%;
     --primary-foreground: 0 0% 100%;
     
-    --background: 220 25% 10%;
-    --foreground: 210 20% 98%;
+    --background: 225 30% 6%;
+    --foreground: 220 15% 95%;
     
-    --card: 220 25% 13%;
-    --card-foreground: 210 20% 98%;
+    --card: 225 25% 9%;
+    --card-foreground: 220 15% 95%;
     
-    --popover: 220 25% 13%;
-    --popover-foreground: 210 20% 98%;
+    --popover: 225 25% 9%;
+    --popover-foreground: 220 15% 95%;
     
-    --secondary: 220 20% 18%;
-    --secondary-foreground: 210 20% 98%;
+    --secondary: 225 20% 12%;
+    --secondary-foreground: 220 15% 95%;
     
-    --muted: 220 15% 20%;
-    --muted-foreground: 215 15% 60%;
+    --muted: 225 15% 15%;
+    --muted-foreground: 220 10% 50%;
     
-    --accent: 215 50% 20%;
-    --accent-foreground: 210 20% 98%;
+    --accent: 225 20% 14%;
+    --accent-foreground: 220 15% 95%;
     
-    /* Finance Colors */
-    --income: 145 60% 45%;
+    /* Finance Colors - refined */
+    --income: 160 60% 42%;
     --income-foreground: 0 0% 100%;
-    --expense: 0 65% 55%;
+    --expense: 0 60% 50%;
     --expense-foreground: 0 0% 100%;
-    --balance: 215 80% 55%;
+    --balance: 220 70% 55%;
     --balance-foreground: 0 0% 100%;
     
-    --destructive: 0 65% 55%;
+    --destructive: 0 60% 50%;
     --destructive-foreground: 0 0% 100%;
     
-    --border: 220 15% 22%;
-    --input: 220 15% 22%;
-    --ring: 215 80% 50%;
+    --border: 225 15% 15%;
+    --input: 225 15% 15%;
+    --ring: 220 70% 55%;
     
-    --radius: 0.75rem;
+    --radius: 0.875rem;
     
-    /* Sidebar */
-    --sidebar-background: 220 30% 8%;
-    --sidebar-foreground: 210 20% 98%;
-    --sidebar-primary: 215 80% 55%;
+    /* Sidebar - glass effect */
+    --sidebar-background: 225 30% 5%;
+    --sidebar-foreground: 220 15% 95%;
+    --sidebar-primary: 220 70% 55%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 215 50% 18%;
-    --sidebar-accent-foreground: 210 20% 98%;
-    --sidebar-border: 220 20% 15%;
-    --sidebar-ring: 215 80% 50%;
+    --sidebar-accent: 225 20% 12%;
+    --sidebar-accent-foreground: 220 15% 95%;
+    --sidebar-border: 225 15% 12%;
+    --sidebar-ring: 220 70% 55%;
   }
 
   .dark {
-    --primary: 215 80% 55%;
+    --primary: 220 70% 55%;
     --primary-foreground: 0 0% 100%;
     
-    --background: 220 25% 10%;
-    --foreground: 210 20% 98%;
+    --background: 225 30% 6%;
+    --foreground: 220 15% 95%;
     
-    --card: 220 25% 13%;
-    --card-foreground: 210 20% 98%;
+    --card: 225 25% 9%;
+    --card-foreground: 220 15% 95%;
     
-    --popover: 220 25% 13%;
-    --popover-foreground: 210 20% 98%;
+    --popover: 225 25% 9%;
+    --popover-foreground: 220 15% 95%;
     
-    --secondary: 220 20% 18%;
-    --secondary-foreground: 210 20% 98%;
+    --secondary: 225 20% 12%;
+    --secondary-foreground: 220 15% 95%;
     
-    --muted: 220 15% 20%;
-    --muted-foreground: 215 15% 60%;
+    --muted: 225 15% 15%;
+    --muted-foreground: 220 10% 50%;
     
-    --accent: 215 50% 20%;
-    --accent-foreground: 210 20% 98%;
+    --accent: 225 20% 14%;
+    --accent-foreground: 220 15% 95%;
     
-    --income: 145 60% 50%;
+    --income: 160 60% 45%;
     --income-foreground: 0 0% 100%;
-    --expense: 0 65% 55%;
+    --expense: 0 60% 50%;
     --expense-foreground: 0 0% 100%;
-    --balance: 215 80% 60%;
+    --balance: 220 70% 60%;
     --balance-foreground: 0 0% 100%;
     
-    --destructive: 0 60% 55%;
+    --destructive: 0 55% 50%;
     --destructive-foreground: 0 0% 100%;
     
-    --border: 220 15% 22%;
-    --input: 220 15% 22%;
-    --ring: 215 80% 55%;
+    --border: 225 15% 15%;
+    --input: 225 15% 15%;
+    --ring: 220 70% 55%;
     
-    --sidebar-background: 220 30% 8%;
-    --sidebar-foreground: 210 20% 98%;
-    --sidebar-primary: 215 80% 55%;
+    --sidebar-background: 225 30% 5%;
+    --sidebar-foreground: 220 15% 95%;
+    --sidebar-primary: 220 70% 55%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 215 50% 18%;
-    --sidebar-accent-foreground: 210 20% 98%;
-    --sidebar-border: 220 20% 15%;
-    --sidebar-ring: 215 80% 55%;
+    --sidebar-accent: 225 20% 12%;
+    --sidebar-accent-foreground: 220 15% 95%;
+    --sidebar-border: 225 15% 12%;
+    --sidebar-ring: 220 70% 55%;
   }
 }
 
@@ -110,58 +110,70 @@
   
   html {
     font-family: 'Inter', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
   
   body {
-    @apply bg-background text-foreground antialiased;
+    @apply bg-background text-foreground;
     min-height: 100vh;
+    letter-spacing: -0.01em;
   }
 }
 
 @layer utilities {
+  /* Glass morphism */
+  .glass {
+    @apply bg-card/80 backdrop-blur-xl border border-border/50;
+  }
+  
   /* Finance card styles */
   .card-income {
-    @apply bg-income text-income-foreground;
+    @apply bg-income/10 text-income border border-income/20;
   }
   
   .card-expense {
-    @apply bg-expense text-expense-foreground;
+    @apply bg-expense/10 text-expense border border-expense/20;
   }
   
   .card-balance {
-    @apply bg-balance text-balance-foreground;
+    @apply bg-balance/10 text-balance border border-balance/20;
   }
   
   .card-primary {
-    @apply bg-primary text-primary-foreground;
+    @apply bg-primary/10 text-primary border border-primary/20;
   }
   
   /* Animations */
   .animate-slide-up {
-    animation: slide-up 0.5s ease-out forwards;
+    animation: slide-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   }
   
   .animate-slide-in-left {
-    animation: slide-in-left 0.4s ease-out forwards;
+    animation: slide-in-left 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   }
   
   .animate-fade-in {
-    animation: fade-in 0.4s ease-out forwards;
+    animation: fade-in 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   }
   
   .animate-scale-in {
-    animation: scale-in 0.3s ease-out forwards;
+    animation: scale-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   }
   
   .animate-pulse-soft {
-    animation: pulse-soft 2s ease-in-out infinite;
+    animation: pulse-soft 2.5s ease-in-out infinite;
+  }
+  
+  .animate-glow {
+    animation: glow 3s ease-in-out infinite;
   }
 }
 
 @keyframes slide-up {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(24px);
   }
   to {
     opacity: 1;
@@ -172,7 +184,7 @@
 @keyframes slide-in-left {
   from {
     opacity: 0;
-    transform: translateX(-20px);
+    transform: translateX(-16px);
   }
   to {
     opacity: 1;
@@ -192,7 +204,7 @@
 @keyframes scale-in {
   from {
     opacity: 0;
-    transform: scale(0.95);
+    transform: scale(0.96);
   }
   to {
     opacity: 1;
@@ -205,33 +217,46 @@
     opacity: 1;
   }
   50% {
-    opacity: 0.7;
+    opacity: 0.5;
   }
 }
 
-/* Scrollbar styling for dark theme */
+@keyframes glow {
+  0%, 100% {
+    box-shadow: 0 0 20px hsl(220 70% 55% / 0.15);
+  }
+  50% {
+    box-shadow: 0 0 40px hsl(220 70% 55% / 0.25);
+  }
+}
+
+/* Scrollbar styling */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: hsl(220, 25%, 12%);
-  border-radius: 4px;
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: hsl(215, 15%, 30%);
-  border-radius: 4px;
+  background: hsl(225 15% 20%);
+  border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: hsl(215, 15%, 40%);
+  background: hsl(225 15% 30%);
 }
 
-/* Smooth transitions */
+/* Smooth transitions - optimized */
 * {
-  transition-property: background-color, border-color, color, fill, stroke;
-  transition-timing-function: ease;
-  transition-duration: 150ms;
+  transition-property: background-color, border-color, color, opacity, transform, box-shadow;
+  transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  transition-duration: 200ms;
+}
+
+/* Remove transition from animations */
+[class*="animate-"] {
+  transition: none;
 }

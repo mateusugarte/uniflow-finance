@@ -21,26 +21,29 @@ export function Sidebar() {
   };
 
   const SidebarContent = () => (
-    <>
-      {/* Logo */}
-      <div className="p-6 border-b border-sidebar-border flex justify-center">
+    <div className="flex flex-col h-full">
+      {/* Logo - centered with more spacing */}
+      <div className="pt-10 pb-8 flex justify-center">
         <Link 
           to="/dashboard" 
           className="group" 
           onClick={() => setMobileOpen(false)}
         >
-          <div className="w-20 h-20 rounded-full bg-primary/20 border-2 border-primary/40 flex items-center justify-center transition-all duration-300 group-hover:scale-105 group-hover:shadow-lg group-hover:shadow-primary/30 overflow-hidden">
+          <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 border border-primary/20 flex items-center justify-center transition-all duration-500 group-hover:scale-110 group-hover:border-primary/40 group-hover:shadow-xl group-hover:shadow-primary/20 overflow-hidden backdrop-blur-sm">
             <img 
               src="/logo.png" 
               alt="Logo" 
-              className="h-16 w-16 object-contain"
+              className="h-10 w-10 object-contain"
             />
           </div>
         </Link>
       </div>
 
-      {/* Navigation */}
-      <nav className="flex-1 p-3 space-y-1">
+      {/* Divider */}
+      <div className="mx-6 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
+
+      {/* Navigation - with more top spacing */}
+      <nav className="flex-1 px-4 pt-10 space-y-2">
         {navItems.map((item, index) => {
           const isActive = location.pathname === item.path;
           const Icon = item.icon;
@@ -51,22 +54,29 @@ export function Sidebar() {
               to={item.path}
               onClick={() => setMobileOpen(false)}
               className={cn(
-                "flex items-center gap-3 px-3 py-3 rounded-xl font-medium text-sm transition-all duration-200 animate-slide-in-left",
+                "group flex items-center gap-3 px-4 py-3.5 rounded-xl font-medium text-sm transition-all duration-300 animate-fade-in",
                 isActive
-                  ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20"
-                  : "text-muted-foreground hover:text-foreground hover:bg-accent"
+                  ? "bg-primary/10 text-primary border border-primary/20"
+                  : "text-muted-foreground hover:text-foreground hover:bg-accent/50 border border-transparent"
               )}
-              style={{ animationDelay: `${index * 50}ms` }}
+              style={{ animationDelay: `${index * 100}ms` }}
             >
-              <Icon className="h-5 w-5 flex-shrink-0" />
-              <span>{item.label}</span>
+              <Icon className={cn(
+                "h-5 w-5 flex-shrink-0 transition-transform duration-300",
+                isActive ? "text-primary" : "group-hover:scale-110"
+              )} />
+              <span className="tracking-wide">{item.label}</span>
+              {isActive && (
+                <div className="ml-auto w-1.5 h-1.5 rounded-full bg-primary animate-pulse-soft" />
+              )}
             </Link>
           );
         })}
       </nav>
 
       {/* Footer */}
-      <div className="p-3 border-t border-sidebar-border">
+      <div className="p-4 mt-auto">
+        <div className="mx-2 mb-4 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
         <Button
           variant="ghost"
           size="sm"
@@ -74,29 +84,29 @@ export function Sidebar() {
             setMobileOpen(false);
             handleLogout();
           }}
-          className="w-full justify-start text-muted-foreground hover:text-expense hover:bg-expense/10"
+          className="w-full justify-start text-muted-foreground hover:text-expense hover:bg-expense/10 rounded-xl py-3 transition-all duration-300"
         >
-          <LogOut className="h-4 w-4 mr-2" />
-          Sair
+          <LogOut className="h-4 w-4 mr-3" />
+          <span className="tracking-wide">Sair</span>
         </Button>
       </div>
-    </>
+    </div>
   );
 
   return (
     <>
       {/* Mobile Header */}
-      <header className="lg:hidden fixed top-0 left-0 right-0 h-14 bg-sidebar-background border-b border-sidebar-border z-50 flex items-center justify-between px-4">
-        <Link to="/dashboard" className="flex items-center gap-2">
-          <div className="w-10 h-10 rounded-full bg-primary/20 border border-primary/40 flex items-center justify-center overflow-hidden">
-            <img src="/logo.png" alt="Logo" className="h-8 w-8 object-contain" />
+      <header className="lg:hidden fixed top-0 left-0 right-0 h-16 bg-sidebar-background/95 backdrop-blur-xl border-b border-border/50 z-50 flex items-center justify-between px-5">
+        <Link to="/dashboard" className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5 border border-primary/20 flex items-center justify-center overflow-hidden">
+            <img src="/logo.png" alt="Logo" className="h-6 w-6 object-contain" />
           </div>
         </Link>
         <Button
           variant="ghost"
           size="icon"
           onClick={() => setMobileOpen(!mobileOpen)}
-          className="text-foreground"
+          className="text-foreground hover:bg-accent/50 rounded-xl"
         >
           {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
         </Button>
@@ -105,7 +115,7 @@ export function Sidebar() {
       {/* Mobile Overlay */}
       {mobileOpen && (
         <div
-          className="lg:hidden fixed inset-0 bg-black/50 z-40 animate-fade-in"
+          className="lg:hidden fixed inset-0 bg-background/80 backdrop-blur-sm z-40 animate-fade-in"
           onClick={() => setMobileOpen(false)}
         />
       )}
@@ -113,7 +123,7 @@ export function Sidebar() {
       {/* Mobile Sidebar */}
       <aside
         className={cn(
-          "lg:hidden fixed top-14 left-0 bottom-0 w-64 bg-sidebar-background border-r border-sidebar-border z-50 flex flex-col transition-transform duration-300",
+          "lg:hidden fixed top-16 left-0 bottom-0 w-72 bg-sidebar-background/95 backdrop-blur-xl border-r border-border/50 z-50 transition-transform duration-300 ease-out",
           mobileOpen ? "translate-x-0" : "-translate-x-full"
         )}
       >
@@ -121,7 +131,7 @@ export function Sidebar() {
       </aside>
 
       {/* Desktop Sidebar */}
-      <aside className="hidden lg:flex fixed left-0 top-0 h-screen w-64 bg-sidebar-background border-r border-sidebar-border flex-col z-50">
+      <aside className="hidden lg:flex fixed left-0 top-0 h-screen w-72 bg-sidebar-background/95 backdrop-blur-xl border-r border-border/30 flex-col z-50">
         <SidebarContent />
       </aside>
     </>
