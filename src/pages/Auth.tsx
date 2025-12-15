@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Loader2, Mail, Lock, User, Eye, EyeOff, Check, X } from "lucide-react";
 import { toast } from "sonner";
@@ -23,7 +22,6 @@ export default function Auth({ onLogin }: AuthPageProps) {
   const [loginData, setLoginData] = useState({
     email: "",
     password: "",
-    remember: false,
   });
 
   // Signup form
@@ -32,7 +30,6 @@ export default function Auth({ onLogin }: AuthPageProps) {
     email: "",
     password: "",
     confirmPassword: "",
-    acceptTerms: false,
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -80,9 +77,6 @@ export default function Auth({ onLogin }: AuthPageProps) {
     if (signupData.password !== signupData.confirmPassword) {
       newErrors.signupConfirmPassword = "Senhas não conferem";
     }
-    if (!signupData.acceptTerms) {
-      newErrors.signupTerms = "Você deve aceitar os termos";
-    }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -112,37 +106,29 @@ export default function Auth({ onLogin }: AuthPageProps) {
     // Simulate API call
     await new Promise((resolve) => setTimeout(resolve, 1000));
     
-    toast.success("Conta criada com sucesso! Bem-vindo ao Uni Capital!");
+    toast.success("Conta criada com sucesso!");
     setIsLoading(false);
     onLogin();
     navigate("/dashboard");
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4">
-      {/* Background decoration */}
-      <div className="fixed inset-0 -z-10">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-background to-balance/10" />
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-primary/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-balance/5 rounded-full blur-3xl" />
-      </div>
-
+    <div className="min-h-screen flex items-center justify-center p-4 bg-background">
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="text-center mb-8 animate-fade-in">
           <img
             src="/logo.png"
             alt="Uni Capital"
-            className="h-16 w-auto mx-auto mb-4"
+            className="h-14 w-auto mx-auto mb-3"
           />
-          <h1 className="text-2xl font-bold text-gradient">Uni Capital</h1>
-          <p className="text-muted-foreground mt-1">Organize suas finanças</p>
+          <h1 className="text-xl font-semibold text-foreground">Uni Capital</h1>
         </div>
 
         {/* Auth Card */}
-        <div className="bg-card/80 backdrop-blur-xl border border-border rounded-2xl p-8 shadow-xl animate-scale-in">
+        <div className="bg-card border border-border rounded-xl p-6 shadow-lg animate-scale-in">
           <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as "login" | "signup")}>
-            <TabsList className="grid grid-cols-2 mb-6 bg-secondary/50">
+            <TabsList className="grid grid-cols-2 mb-6 bg-secondary">
               <TabsTrigger
                 value="login"
                 className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
@@ -161,9 +147,7 @@ export default function Auth({ onLogin }: AuthPageProps) {
             <TabsContent value="login">
               <form onSubmit={handleLogin} className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="login-email" className="text-foreground">
-                    Email
-                  </Label>
+                  <Label htmlFor="login-email">Email</Label>
                   <div className="relative">
                     <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                     <Input
@@ -175,7 +159,7 @@ export default function Auth({ onLogin }: AuthPageProps) {
                         setLoginData({ ...loginData, email: e.target.value })
                       }
                       className={cn(
-                        "pl-10 h-12",
+                        "pl-10 h-11",
                         errors.loginEmail && "border-destructive"
                       )}
                     />
@@ -186,9 +170,7 @@ export default function Auth({ onLogin }: AuthPageProps) {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="login-password" className="text-foreground">
-                    Senha
-                  </Label>
+                  <Label htmlFor="login-password">Senha</Label>
                   <div className="relative">
                     <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                     <Input
@@ -200,7 +182,7 @@ export default function Auth({ onLogin }: AuthPageProps) {
                         setLoginData({ ...loginData, password: e.target.value })
                       }
                       className={cn(
-                        "pl-10 pr-10 h-12",
+                        "pl-10 pr-10 h-11",
                         errors.loginPassword && "border-destructive"
                       )}
                     />
@@ -221,40 +203,15 @@ export default function Auth({ onLogin }: AuthPageProps) {
                   )}
                 </div>
 
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-2">
-                    <Checkbox
-                      id="remember"
-                      checked={loginData.remember}
-                      onCheckedChange={(checked) =>
-                        setLoginData({ ...loginData, remember: checked as boolean })
-                      }
-                    />
-                    <label
-                      htmlFor="remember"
-                      className="text-sm text-muted-foreground cursor-pointer"
-                    >
-                      Lembrar-me
-                    </label>
-                  </div>
-                  <button
-                    type="button"
-                    className="text-sm text-primary hover:underline"
-                  >
-                    Esqueceu a senha?
-                  </button>
-                </div>
-
                 <Button
                   type="submit"
-                  variant="gradient"
                   size="lg"
-                  className="w-full"
+                  className="w-full bg-primary hover:bg-primary/90"
                   disabled={isLoading}
                 >
                   {isLoading ? (
                     <>
-                      <Loader2 className="h-5 w-5 animate-spin" />
+                      <Loader2 className="h-4 w-4 animate-spin mr-2" />
                       Entrando...
                     </>
                   ) : (
@@ -263,7 +220,7 @@ export default function Auth({ onLogin }: AuthPageProps) {
                 </Button>
               </form>
 
-              <p className="text-center text-sm text-muted-foreground mt-6">
+              <p className="text-center text-sm text-muted-foreground mt-4">
                 Não tem uma conta?{" "}
                 <button
                   onClick={() => setActiveTab("signup")}
@@ -278,9 +235,7 @@ export default function Auth({ onLogin }: AuthPageProps) {
             <TabsContent value="signup">
               <form onSubmit={handleSignup} className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="signup-name" className="text-foreground">
-                    Nome Completo
-                  </Label>
+                  <Label htmlFor="signup-name">Nome Completo</Label>
                   <div className="relative">
                     <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                     <Input
@@ -292,7 +247,7 @@ export default function Auth({ onLogin }: AuthPageProps) {
                         setSignupData({ ...signupData, name: e.target.value })
                       }
                       className={cn(
-                        "pl-10 h-12",
+                        "pl-10 h-11",
                         errors.signupName && "border-destructive"
                       )}
                     />
@@ -303,9 +258,7 @@ export default function Auth({ onLogin }: AuthPageProps) {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="signup-email" className="text-foreground">
-                    Email
-                  </Label>
+                  <Label htmlFor="signup-email">Email</Label>
                   <div className="relative">
                     <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                     <Input
@@ -317,7 +270,7 @@ export default function Auth({ onLogin }: AuthPageProps) {
                         setSignupData({ ...signupData, email: e.target.value })
                       }
                       className={cn(
-                        "pl-10 h-12",
+                        "pl-10 h-11",
                         errors.signupEmail && "border-destructive"
                       )}
                     />
@@ -328,9 +281,7 @@ export default function Auth({ onLogin }: AuthPageProps) {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="signup-password" className="text-foreground">
-                    Senha
-                  </Label>
+                  <Label htmlFor="signup-password">Senha</Label>
                   <div className="relative">
                     <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                     <Input
@@ -342,7 +293,7 @@ export default function Auth({ onLogin }: AuthPageProps) {
                         setSignupData({ ...signupData, password: e.target.value })
                       }
                       className={cn(
-                        "pl-10 pr-10 h-12",
+                        "pl-10 pr-10 h-11",
                         errors.signupPassword && "border-destructive"
                       )}
                     />
@@ -382,9 +333,7 @@ export default function Auth({ onLogin }: AuthPageProps) {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="signup-confirm" className="text-foreground">
-                    Confirmar Senha
-                  </Label>
+                  <Label htmlFor="signup-confirm">Confirmar Senha</Label>
                   <div className="relative">
                     <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                     <Input
@@ -396,7 +345,7 @@ export default function Auth({ onLogin }: AuthPageProps) {
                         setSignupData({ ...signupData, confirmPassword: e.target.value })
                       }
                       className={cn(
-                        "pl-10 h-12",
+                        "pl-10 h-11",
                         errors.signupConfirmPassword && "border-destructive"
                       )}
                     />
@@ -408,43 +357,15 @@ export default function Auth({ onLogin }: AuthPageProps) {
                   )}
                 </div>
 
-                <div className="flex items-start space-x-2">
-                  <Checkbox
-                    id="terms"
-                    checked={signupData.acceptTerms}
-                    onCheckedChange={(checked) =>
-                      setSignupData({ ...signupData, acceptTerms: checked as boolean })
-                    }
-                    className="mt-0.5"
-                  />
-                  <label
-                    htmlFor="terms"
-                    className={cn(
-                      "text-sm text-muted-foreground cursor-pointer",
-                      errors.signupTerms && "text-destructive"
-                    )}
-                  >
-                    Aceito os{" "}
-                    <a href="#" className="text-primary hover:underline">
-                      termos de uso
-                    </a>{" "}
-                    e{" "}
-                    <a href="#" className="text-primary hover:underline">
-                      política de privacidade
-                    </a>
-                  </label>
-                </div>
-
                 <Button
                   type="submit"
-                  variant="gradient"
                   size="lg"
-                  className="w-full"
+                  className="w-full bg-primary hover:bg-primary/90"
                   disabled={isLoading}
                 >
                   {isLoading ? (
                     <>
-                      <Loader2 className="h-5 w-5 animate-spin" />
+                      <Loader2 className="h-4 w-4 animate-spin mr-2" />
                       Criando conta...
                     </>
                   ) : (
@@ -453,7 +374,7 @@ export default function Auth({ onLogin }: AuthPageProps) {
                 </Button>
               </form>
 
-              <p className="text-center text-sm text-muted-foreground mt-6">
+              <p className="text-center text-sm text-muted-foreground mt-4">
                 Já tem uma conta?{" "}
                 <button
                   onClick={() => setActiveTab("login")}

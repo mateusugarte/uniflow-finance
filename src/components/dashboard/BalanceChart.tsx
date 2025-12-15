@@ -1,14 +1,12 @@
 import { useMemo } from "react";
 import {
-  LineChart,
-  Line,
+  AreaChart,
+  Area,
   XAxis,
   YAxis,
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
-  Area,
-  AreaChart,
 } from "recharts";
 import { DailyBalance } from "@/types/finance";
 import { formatCurrency } from "@/lib/format";
@@ -27,61 +25,60 @@ export function BalanceChart({ data, className }: BalanceChartProps) {
     }));
   }, [data]);
 
-  const minValue = Math.min(...data.map((d) => d.saldo));
-  const maxValue = Math.max(...data.map((d) => d.saldo));
-  const padding = Math.max(Math.abs(minValue), Math.abs(maxValue)) * 0.1;
+  const minValue = Math.min(...data.map((d) => d.saldo), 0);
+  const maxValue = Math.max(...data.map((d) => d.saldo), 0);
+  const padding = Math.max(Math.abs(minValue), Math.abs(maxValue)) * 0.15;
+
+  if (data.length === 0) {
+    return (
+      <div className={className}>
+        <div className="h-[280px] flex items-center justify-center text-muted-foreground">
+          Nenhum dado disponível para o período selecionado
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className={className}>
-      <ResponsiveContainer width="100%" height={300}>
-        <AreaChart data={chartData} margin={{ top: 20, right: 20, left: 0, bottom: 0 }}>
+      <ResponsiveContainer width="100%" height={280}>
+        <AreaChart data={chartData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
           <defs>
-            <linearGradient id="colorSaldo" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor="hsl(252, 87%, 54%)" stopOpacity={0.4} />
-              <stop offset="95%" stopColor="hsl(252, 87%, 54%)" stopOpacity={0} />
+            <linearGradient id="colorBalance" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="hsl(220, 70%, 45%)" stopOpacity={0.3} />
+              <stop offset="100%" stopColor="hsl(220, 70%, 45%)" stopOpacity={0.02} />
             </linearGradient>
-            <linearGradient id="lineGradient" x1="0" y1="0" x2="1" y2="0">
-              <stop offset="0%" stopColor="hsl(252, 87%, 54%)" />
-              <stop offset="50%" stopColor="hsl(280, 85%, 55%)" />
-              <stop offset="100%" stopColor="hsl(200, 90%, 55%)" />
-            </linearGradient>
-            <filter id="glow">
-              <feGaussianBlur stdDeviation="3" result="coloredBlur" />
-              <feMerge>
-                <feMergeNode in="coloredBlur" />
-                <feMergeNode in="SourceGraphic" />
-              </feMerge>
-            </filter>
           </defs>
           <CartesianGrid
             strokeDasharray="3 3"
             vertical={false}
             stroke="hsl(var(--border))"
-            opacity={0.5}
+            opacity={0.6}
           />
           <XAxis
             dataKey="data"
             axisLine={false}
             tickLine={false}
-            tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 12 }}
-            tickMargin={10}
+            tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 11 }}
+            tickMargin={8}
           />
           <YAxis
             axisLine={false}
             tickLine={false}
-            tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 12 }}
+            tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 11 }}
             tickFormatter={(value) => formatCurrency(value, true)}
             domain={[minValue - padding, maxValue + padding]}
-            width={80}
+            width={70}
           />
           <Tooltip
             content={({ active, payload, label }) => {
               if (active && payload && payload.length) {
+                const value = payload[0].value as number;
                 return (
-                  <div className="bg-card border border-border rounded-lg shadow-lg p-3">
-                    <p className="text-sm text-muted-foreground">Dia {label}</p>
-                    <p className="text-lg font-bold text-foreground">
-                      {formatCurrency(payload[0].value as number)}
+                  <div className="bg-card border border-border rounded-lg shadow-md p-3">
+                    <p className="text-xs text-muted-foreground mb-1">Dia {label}</p>
+                    <p className={`text-base font-semibold ${value >= 0 ? 'text-income' : 'text-expense'}`}>
+                      {formatCurrency(value)}
                     </p>
                   </div>
                 );
@@ -92,11 +89,10 @@ export function BalanceChart({ data, className }: BalanceChartProps) {
           <Area
             type="monotone"
             dataKey="saldo"
-            stroke="url(#lineGradient)"
-            strokeWidth={3}
-            fill="url(#colorSaldo)"
-            filter="url(#glow)"
-            animationDuration={1500}
+            stroke="hsl(220, 70%, 45%)"
+            strokeWidth={2}
+            fill="url(#colorBalance)"
+            animationDuration={800}
             animationEasing="ease-out"
           />
         </AreaChart>
