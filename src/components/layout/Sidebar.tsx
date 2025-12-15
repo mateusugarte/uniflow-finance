@@ -33,7 +33,7 @@ export function Sidebar() {
             <img 
               src="/logo.png" 
               alt="Logo" 
-              className="w-10 h-10 object-contain"
+              className="w-[140%] h-[140%] object-cover"
             />
           </div>
         </Link>
