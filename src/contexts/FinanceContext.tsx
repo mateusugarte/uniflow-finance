@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useCallback, useEffect, ReactNode } from "react";
 import { Operation, OperationFormData, MonthlyStats, DailyBalance } from "@/types/finance";
-import { format, getDaysInMonth, parseISO, startOfMonth, endOfMonth, eachDayOfInterval } from "date-fns";
+import { format, getDaysInMonth, parseISO, startOfMonth, endOfMonth, eachDayOfInterval, differenceInDays } from "date-fns";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "./AuthContext";
@@ -14,6 +14,9 @@ interface FinanceContextType {
   getMonthlyStats: (year: number, month: number) => MonthlyStats;
   getOperationsByMonth: (year: number, month: number) => Operation[];
   getDailyBalances: (year: number, month: number) => DailyBalance[];
+  getOperationsByPeriod: (startDate: Date, endDate: Date) => Operation[];
+  getStatsByPeriod: (startDate: Date, endDate: Date) => MonthlyStats;
+  getDailyBalancesByPeriod: (startDate: Date, endDate: Date) => DailyBalance[];
   selectedMonth: Date;
   setSelectedMonth: (date: Date) => void;
   refreshOperations: () => Promise<void>;
@@ -230,6 +233,81 @@ export function FinanceProvider({ children }: { children: ReactNode }) {
     });
   }, [getOperationsByMonth]);
 
+  const getOperationsByPeriod = useCallback((startDate: Date, endDate: Date): Operation[] => {
+    const startStr = format(startDate, "yyyy-MM-dd");
+    const endStr = format(endDate, "yyyy-MM-dd");
+    
+    return operations
+      .filter((op) => op.data >= startStr && op.data <= endStr)
+      .sort((a, b) => {
+        const dateCompare = b.data.localeCompare(a.data);
+        if (dateCompare !== 0) return dateCompare;
+        return b.hora.localeCompare(a.hora);
+      });
+  }, [operations]);
+
+  const getStatsByPeriod = useCallback((startDate: Date, endDate: Date): MonthlyStats => {
+    const periodOps = getOperationsByPeriod(startDate, endDate);
+
+    const entradas = periodOps.filter((op) => op.tipo === "entrada");
+    const saidas = periodOps.filter((op) => op.tipo === "saida");
+
+    const totalEntradas = entradas.reduce((sum, op) => sum + op.valor, 0);
+    const totalSaidas = saidas.reduce((sum, op) => sum + op.valor, 0);
+    const saldoLiquido = totalEntradas - totalSaidas;
+
+    const maiorEntrada = entradas.length > 0
+      ? entradas.reduce((max, op) => op.valor > max.valor ? op : max)
+      : null;
+
+    const maiorSaida = saidas.length > 0
+      ? saidas.reduce((max, op) => op.valor > max.valor ? op : max)
+      : null;
+
+    const daysInPeriod = differenceInDays(endDate, startDate) + 1;
+    const mediaGastoDiario = totalSaidas / daysInPeriod;
+
+    const taxaEconomia = totalEntradas > 0
+      ? ((totalEntradas - totalSaidas) / totalEntradas) * 100
+      : 0;
+
+    return {
+      totalEntradas,
+      totalSaidas,
+      saldoLiquido,
+      maiorEntrada,
+      maiorSaida,
+      mediaGastoDiario,
+      taxaEconomia,
+      totalOperacoes: periodOps.length,
+    };
+  }, [getOperationsByPeriod]);
+
+  const getDailyBalancesByPeriod = useCallback((startDate: Date, endDate: Date): DailyBalance[] => {
+    const periodOps = getOperationsByPeriod(startDate, endDate);
+    const days = eachDayOfInterval({ start: startDate, end: endDate });
+
+    let runningBalance = 0;
+
+    return days.map((day) => {
+      const dayStr = format(day, "yyyy-MM-dd");
+      const dayOps = periodOps.filter((op) => op.data === dayStr);
+
+      dayOps.forEach((op) => {
+        if (op.tipo === "entrada") {
+          runningBalance += op.valor;
+        } else {
+          runningBalance -= op.valor;
+        }
+      });
+
+      return {
+        data: format(day, "dd"),
+        saldo: runningBalance,
+      };
+    });
+  }, [getOperationsByPeriod]);
+
   return (
     <FinanceContext.Provider
       value={{
@@ -241,6 +319,9 @@ export function FinanceProvider({ children }: { children: ReactNode }) {
         getMonthlyStats,
         getOperationsByMonth,
         getDailyBalances,
+        getOperationsByPeriod,
+        getStatsByPeriod,
+        getDailyBalancesByPeriod,
         selectedMonth,
         setSelectedMonth,
         refreshOperations: fetchOperations,

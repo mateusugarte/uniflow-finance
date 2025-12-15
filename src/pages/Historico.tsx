@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useFinance } from "@/contexts/FinanceContext";
 import { Operation } from "@/types/finance";
-import { MonthSelector } from "@/components/dashboard/MonthSelector";
+import { PeriodFilter, PeriodFilterValue, getDefaultPeriodFilter } from "@/components/dashboard/PeriodFilter";
 import { StatCard } from "@/components/dashboard/StatCard";
 import { OperationItem } from "@/components/dashboard/OperationItem";
 import { formatCurrency, formatPercent, formatFullDate } from "@/lib/format";
@@ -36,22 +36,18 @@ import {
 
 export default function Historico() {
   const {
-    selectedMonth,
-    setSelectedMonth,
-    getMonthlyStats,
-    getOperationsByMonth,
+    getStatsByPeriod,
+    getOperationsByPeriod,
     deleteOperation,
   } = useFinance();
 
+  const [periodFilter, setPeriodFilter] = useState<PeriodFilterValue>(getDefaultPeriodFilter());
   const [search, setSearch] = useState("");
   const [selectedOperation, setSelectedOperation] = useState<Operation | null>(null);
   const [deleteId, setDeleteId] = useState<string | null>(null);
 
-  const year = selectedMonth.getFullYear();
-  const month = selectedMonth.getMonth();
-
-  const stats = getMonthlyStats(year, month);
-  const allOperations = getOperationsByMonth(year, month);
+  const stats = getStatsByPeriod(periodFilter.startDate, periodFilter.endDate);
+  const allOperations = getOperationsByPeriod(periodFilter.startDate, periodFilter.endDate);
 
   const filteredOperations = allOperations.filter((op) =>
     op.descricao.toLowerCase().includes(search.toLowerCase()) ||
@@ -82,9 +78,9 @@ export default function Historico() {
             Análise detalhada das suas operações
           </p>
         </div>
-        <MonthSelector
-          selectedMonth={selectedMonth}
-          onMonthChange={setSelectedMonth}
+        <PeriodFilter
+          value={periodFilter}
+          onChange={setPeriodFilter}
         />
       </div>
 
