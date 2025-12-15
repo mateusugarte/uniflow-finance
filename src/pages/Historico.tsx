@@ -87,23 +87,25 @@ export default function Historico() {
       {/* Summary Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard
-          title="Total de Operações"
-          value={stats.totalOperacoes.toString()}
-          icon={Activity}
+          title="Total de Entradas"
+          value={formatCurrency(stats.totalEntradas)}
+          subtitle={`${entradas.length} operações`}
+          icon={TrendingUp}
+          variant="income"
           delay={0}
         />
         <StatCard
-          title="Número de Entradas"
-          value={entradas.length.toString()}
-          subtitle={formatCurrency(stats.totalEntradas)}
-          icon={TrendingUp}
+          title="Total de Saídas"
+          value={formatCurrency(stats.totalSaidas)}
+          subtitle={`${saidas.length} operações`}
+          icon={TrendingDown}
+          variant="expense"
           delay={100}
         />
         <StatCard
-          title="Número de Saídas"
-          value={saidas.length.toString()}
-          subtitle={formatCurrency(stats.totalSaidas)}
-          icon={TrendingDown}
+          title="Total de Operações"
+          value={stats.totalOperacoes.toString()}
+          icon={Activity}
           delay={200}
         />
         <StatCard
