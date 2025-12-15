@@ -122,35 +122,18 @@ export default function Historico() {
         />
       </div>
 
-      {/* Balance Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="bg-balance/20 border border-balance/30 rounded-xl p-6 animate-slide-up" style={{ animationDelay: "300ms" }}>
-          <div className="flex items-center gap-4">
-            <div className="p-3 rounded-lg bg-balance text-balance-foreground">
-              <Wallet className="h-6 w-6" />
-            </div>
-            <div>
-              <p className="text-sm text-muted-foreground">Saldo Sem Venda</p>
-              <p className="text-2xl font-bold text-balance">
-                {formatCurrency(stats.saldoSemVenda)}
-              </p>
-              <p className="text-xs text-muted-foreground mt-1">Entradas - Saídas</p>
-            </div>
+      {/* Balance Card */}
+      <div className="bg-balance/20 border border-balance/30 rounded-xl p-6 animate-slide-up" style={{ animationDelay: "300ms" }}>
+        <div className="flex items-center gap-4">
+          <div className="p-3 rounded-lg bg-balance text-balance-foreground">
+            <Wallet className="h-6 w-6" />
           </div>
-        </div>
-
-        <div className="bg-card border border-border rounded-xl p-6 animate-slide-up" style={{ animationDelay: "350ms" }}>
-          <div className="flex items-center gap-4">
-            <div className="p-3 rounded-lg bg-muted">
-              <Wallet className="h-6 w-6 text-muted-foreground" />
-            </div>
-            <div>
-              <p className="text-sm text-muted-foreground">Saldo Com Venda</p>
-              <p className="text-2xl font-bold text-foreground">
-                {formatCurrency(stats.saldoLiquido)}
-              </p>
-              <p className="text-xs text-muted-foreground mt-1">Entradas - Saídas - Vendas</p>
-            </div>
+          <div>
+            <p className="text-sm text-muted-foreground">Saldo Líquido</p>
+            <p className="text-2xl font-bold text-balance">
+              {formatCurrency(stats.saldoLiquido)}
+            </p>
+            <p className="text-xs text-muted-foreground mt-1">Entradas - Saídas - Vendas</p>
           </div>
         </div>
       </div>
