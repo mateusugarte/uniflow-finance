@@ -108,25 +108,15 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* Balance Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <StatCard
-          title="Saldo Sem Venda"
-          value={formatCurrency(stats.saldoSemVenda)}
-          subtitle="Entradas - Saídas"
-          icon={Wallet}
-          variant="balance"
-          delay={200}
-        />
-        <StatCard
-          title="Saldo Com Venda"
-          value={formatCurrency(stats.saldoLiquido)}
-          subtitle="Entradas - Saídas - Vendas"
-          icon={Wallet}
-          variant="default"
-          delay={250}
-        />
-      </div>
+      {/* Balance Card */}
+      <StatCard
+        title="Saldo Líquido"
+        value={formatCurrency(stats.saldoLiquido)}
+        subtitle="Entradas - Saídas - Vendas"
+        icon={Wallet}
+        variant="balance"
+        delay={200}
+      />
 
       {/* Chart Section */}
       <div className="bg-card border border-border rounded-xl p-5 animate-slide-up" style={{ animationDelay: "300ms" }}>
