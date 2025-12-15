@@ -6,7 +6,6 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { FinanceProvider } from "@/contexts/FinanceContext";
 import { AppLayout } from "@/components/layout/AppLayout";
-import Landing from "./pages/Landing";
 import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
 import Registrar from "./pages/Registrar";
@@ -35,14 +34,14 @@ const App = () => {
           <Sonner position="top-right" richColors />
           <BrowserRouter>
             <Routes>
-              {/* Public routes */}
+              {/* Redirect root to auth */}
               <Route
                 path="/"
                 element={
                   isAuthenticated ? (
                     <Navigate to="/dashboard" replace />
                   ) : (
-                    <Landing />
+                    <Navigate to="/auth" replace />
                   )
                 }
               />

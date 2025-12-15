@@ -18,13 +18,11 @@ export default function Auth({ onLogin }: AuthPageProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
-  // Login form
   const [loginData, setLoginData] = useState({
     email: "",
     password: "",
   });
 
-  // Signup form
   const [signupData, setSignupData] = useState({
     name: "",
     email: "",
@@ -34,7 +32,6 @@ export default function Auth({ onLogin }: AuthPageProps) {
 
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  // Password validation rules
   const passwordRules = [
     { label: "Mínimo 8 caracteres", valid: signupData.password.length >= 8 },
     { label: "Uma letra maiúscula", valid: /[A-Z]/.test(signupData.password) },
@@ -87,9 +84,7 @@ export default function Auth({ onLogin }: AuthPageProps) {
     if (!validateLogin()) return;
 
     setIsLoading(true);
-    
     await new Promise((resolve) => setTimeout(resolve, 1000));
-    
     toast.success("Login realizado com sucesso!");
     setIsLoading(false);
     onLogin();
@@ -101,9 +96,7 @@ export default function Auth({ onLogin }: AuthPageProps) {
     if (!validateSignup()) return;
 
     setIsLoading(true);
-    
     await new Promise((resolve) => setTimeout(resolve, 1000));
-    
     toast.success("Conta criada com sucesso!");
     setIsLoading(false);
     onLogin();
@@ -112,32 +105,33 @@ export default function Auth({ onLogin }: AuthPageProps) {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-background">
-      <div className="w-full max-w-md animate-scale-in">
+      <div className="w-full max-w-sm sm:max-w-md animate-scale-in">
         {/* Logo */}
-        <div className="text-center mb-8 animate-fade-in">
-          <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-primary/20 border border-primary/30 flex items-center justify-center">
+        <div className="text-center mb-6 sm:mb-8 animate-fade-in">
+          <div className="w-28 h-28 sm:w-32 sm:h-32 mx-auto mb-4 rounded-full bg-primary/20 border-2 border-primary/40 flex items-center justify-center shadow-lg shadow-primary/20">
             <img
               src="/logo.png"
               alt="Uni Capital"
-              className="h-12 w-12 object-contain"
+              className="h-20 w-20 sm:h-24 sm:w-24 object-contain"
             />
           </div>
-          <h1 className="text-xl font-semibold text-foreground">Uni Capital</h1>
+          <h1 className="text-xl sm:text-2xl font-bold text-foreground">Uni Capital</h1>
+          <p className="text-sm text-muted-foreground mt-1">Organize suas finanças</p>
         </div>
 
         {/* Auth Card */}
-        <div className="bg-card border border-border rounded-xl p-6 shadow-xl">
+        <div className="bg-card border border-border rounded-xl p-5 sm:p-6 shadow-xl">
           <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as "login" | "signup")}>
-            <TabsList className="grid grid-cols-2 mb-6 bg-secondary">
+            <TabsList className="grid grid-cols-2 mb-5 sm:mb-6 bg-secondary">
               <TabsTrigger
                 value="login"
-                className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all duration-200"
+                className="text-sm data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all duration-200"
               >
                 Entrar
               </TabsTrigger>
               <TabsTrigger
                 value="signup"
-                className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all duration-200"
+                className="text-sm data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all duration-200"
               >
                 Criar Conta
               </TabsTrigger>
@@ -147,7 +141,7 @@ export default function Auth({ onLogin }: AuthPageProps) {
             <TabsContent value="login" className="animate-fade-in">
               <form onSubmit={handleLogin} className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="login-email">Email</Label>
+                  <Label htmlFor="login-email" className="text-sm">Email</Label>
                   <div className="relative">
                     <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                     <Input
@@ -159,18 +153,18 @@ export default function Auth({ onLogin }: AuthPageProps) {
                         setLoginData({ ...loginData, email: e.target.value })
                       }
                       className={cn(
-                        "pl-10 h-11",
+                        "pl-10 h-11 text-base",
                         errors.loginEmail && "border-destructive"
                       )}
                     />
                   </div>
                   {errors.loginEmail && (
-                    <p className="text-sm text-destructive">{errors.loginEmail}</p>
+                    <p className="text-xs text-destructive">{errors.loginEmail}</p>
                   )}
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="login-password">Senha</Label>
+                  <Label htmlFor="login-password" className="text-sm">Senha</Label>
                   <div className="relative">
                     <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                     <Input
@@ -182,7 +176,7 @@ export default function Auth({ onLogin }: AuthPageProps) {
                         setLoginData({ ...loginData, password: e.target.value })
                       }
                       className={cn(
-                        "pl-10 pr-10 h-11",
+                        "pl-10 pr-10 h-11 text-base",
                         errors.loginPassword && "border-destructive"
                       )}
                     />
@@ -191,24 +185,15 @@ export default function Auth({ onLogin }: AuthPageProps) {
                       onClick={() => setShowPassword(!showPassword)}
                       className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
                     >
-                      {showPassword ? (
-                        <EyeOff className="h-4 w-4" />
-                      ) : (
-                        <Eye className="h-4 w-4" />
-                      )}
+                      {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                     </button>
                   </div>
                   {errors.loginPassword && (
-                    <p className="text-sm text-destructive">{errors.loginPassword}</p>
+                    <p className="text-xs text-destructive">{errors.loginPassword}</p>
                   )}
                 </div>
 
-                <Button
-                  type="submit"
-                  size="lg"
-                  className="w-full"
-                  disabled={isLoading}
-                >
+                <Button type="submit" className="w-full h-11 text-base" disabled={isLoading}>
                   {isLoading ? (
                     <>
                       <Loader2 className="h-4 w-4 animate-spin mr-2" />
@@ -233,9 +218,9 @@ export default function Auth({ onLogin }: AuthPageProps) {
 
             {/* Signup Form */}
             <TabsContent value="signup" className="animate-fade-in">
-              <form onSubmit={handleSignup} className="space-y-4">
+              <form onSubmit={handleSignup} className="space-y-3 sm:space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="signup-name">Nome Completo</Label>
+                  <Label htmlFor="signup-name" className="text-sm">Nome Completo</Label>
                   <div className="relative">
                     <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                     <Input
@@ -247,18 +232,18 @@ export default function Auth({ onLogin }: AuthPageProps) {
                         setSignupData({ ...signupData, name: e.target.value })
                       }
                       className={cn(
-                        "pl-10 h-11",
+                        "pl-10 h-11 text-base",
                         errors.signupName && "border-destructive"
                       )}
                     />
                   </div>
                   {errors.signupName && (
-                    <p className="text-sm text-destructive">{errors.signupName}</p>
+                    <p className="text-xs text-destructive">{errors.signupName}</p>
                   )}
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="signup-email">Email</Label>
+                  <Label htmlFor="signup-email" className="text-sm">Email</Label>
                   <div className="relative">
                     <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                     <Input
@@ -270,18 +255,18 @@ export default function Auth({ onLogin }: AuthPageProps) {
                         setSignupData({ ...signupData, email: e.target.value })
                       }
                       className={cn(
-                        "pl-10 h-11",
+                        "pl-10 h-11 text-base",
                         errors.signupEmail && "border-destructive"
                       )}
                     />
                   </div>
                   {errors.signupEmail && (
-                    <p className="text-sm text-destructive">{errors.signupEmail}</p>
+                    <p className="text-xs text-destructive">{errors.signupEmail}</p>
                   )}
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="signup-password">Senha</Label>
+                  <Label htmlFor="signup-password" className="text-sm">Senha</Label>
                   <div className="relative">
                     <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                     <Input
@@ -293,7 +278,7 @@ export default function Auth({ onLogin }: AuthPageProps) {
                         setSignupData({ ...signupData, password: e.target.value })
                       }
                       className={cn(
-                        "pl-10 pr-10 h-11",
+                        "pl-10 pr-10 h-11 text-base",
                         errors.signupPassword && "border-destructive"
                       )}
                     />
@@ -302,11 +287,7 @@ export default function Auth({ onLogin }: AuthPageProps) {
                       onClick={() => setShowPassword(!showPassword)}
                       className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
                     >
-                      {showPassword ? (
-                        <EyeOff className="h-4 w-4" />
-                      ) : (
-                        <Eye className="h-4 w-4" />
-                      )}
+                      {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                     </button>
                   </div>
                   {signupData.password && (
@@ -319,11 +300,7 @@ export default function Auth({ onLogin }: AuthPageProps) {
                             rule.valid ? "text-income" : "text-muted-foreground"
                           )}
                         >
-                          {rule.valid ? (
-                            <Check className="h-3 w-3" />
-                          ) : (
-                            <X className="h-3 w-3" />
-                          )}
+                          {rule.valid ? <Check className="h-3 w-3" /> : <X className="h-3 w-3" />}
                           {rule.label}
                         </div>
                       ))}
@@ -332,7 +309,7 @@ export default function Auth({ onLogin }: AuthPageProps) {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="signup-confirm">Confirmar Senha</Label>
+                  <Label htmlFor="signup-confirm" className="text-sm">Confirmar Senha</Label>
                   <div className="relative">
                     <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                     <Input
@@ -344,24 +321,17 @@ export default function Auth({ onLogin }: AuthPageProps) {
                         setSignupData({ ...signupData, confirmPassword: e.target.value })
                       }
                       className={cn(
-                        "pl-10 h-11",
+                        "pl-10 h-11 text-base",
                         errors.signupConfirmPassword && "border-destructive"
                       )}
                     />
                   </div>
                   {errors.signupConfirmPassword && (
-                    <p className="text-sm text-destructive">
-                      {errors.signupConfirmPassword}
-                    </p>
+                    <p className="text-xs text-destructive">{errors.signupConfirmPassword}</p>
                   )}
                 </div>
 
-                <Button
-                  type="submit"
-                  size="lg"
-                  className="w-full"
-                  disabled={isLoading}
-                >
+                <Button type="submit" className="w-full h-11 text-base" disabled={isLoading}>
                   {isLoading ? (
                     <>
                       <Loader2 className="h-4 w-4 animate-spin mr-2" />

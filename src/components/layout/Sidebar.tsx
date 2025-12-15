@@ -1,6 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { LayoutDashboard, PlusCircle, History, LogOut, ChevronLeft, ChevronRight } from "lucide-react";
+import { LayoutDashboard, PlusCircle, History, LogOut, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 
@@ -16,18 +16,13 @@ interface SidebarProps {
 
 export function Sidebar({ onLogout }: SidebarProps) {
   const location = useLocation();
-  const [collapsed, setCollapsed] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
-  return (
-    <aside
-      className={cn(
-        "fixed left-0 top-0 h-screen bg-sidebar-background border-r border-sidebar-border flex flex-col transition-all duration-300 z-50",
-        collapsed ? "w-16" : "w-64"
-      )}
-    >
+  const SidebarContent = () => (
+    <>
       {/* Logo */}
       <div className="p-4 border-b border-sidebar-border">
-        <Link to="/dashboard" className="flex items-center gap-3 group">
+        <Link to="/dashboard" className="flex items-center gap-3 group" onClick={() => setMobileOpen(false)}>
           <div className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center flex-shrink-0 transition-transform duration-300 group-hover:scale-105">
             <img 
               src="/logo.png" 
@@ -35,11 +30,9 @@ export function Sidebar({ onLogout }: SidebarProps) {
               className="h-7 w-7 object-contain"
             />
           </div>
-          {!collapsed && (
-            <span className="font-bold text-lg text-foreground animate-fade-in">
-              Uni Capital
-            </span>
-          )}
+          <span className="font-bold text-lg text-foreground">
+            Uni Capital
+          </span>
         </Link>
       </div>
 
@@ -53,6 +46,7 @@ export function Sidebar({ onLogout }: SidebarProps) {
             <Link
               key={item.path}
               to={item.path}
+              onClick={() => setMobileOpen(false)}
               className={cn(
                 "flex items-center gap-3 px-3 py-3 rounded-xl font-medium text-sm transition-all duration-200 animate-slide-in-left",
                 isActive
@@ -62,47 +56,74 @@ export function Sidebar({ onLogout }: SidebarProps) {
               style={{ animationDelay: `${index * 50}ms` }}
             >
               <Icon className="h-5 w-5 flex-shrink-0" />
-              {!collapsed && <span>{item.label}</span>}
+              <span>{item.label}</span>
             </Link>
           );
         })}
       </nav>
 
       {/* Footer */}
-      <div className="p-3 border-t border-sidebar-border space-y-2">
-        {/* Collapse button */}
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => setCollapsed(!collapsed)}
-          className="w-full justify-center text-muted-foreground hover:text-foreground"
-        >
-          {collapsed ? (
-            <ChevronRight className="h-4 w-4" />
-          ) : (
-            <>
-              <ChevronLeft className="h-4 w-4 mr-2" />
-              <span>Recolher</span>
-            </>
-          )}
-        </Button>
-
-        {/* Logout */}
+      <div className="p-3 border-t border-sidebar-border">
         {onLogout && (
           <Button
             variant="ghost"
             size="sm"
-            onClick={onLogout}
-            className={cn(
-              "w-full text-muted-foreground hover:text-expense hover:bg-expense/10",
-              collapsed ? "justify-center" : "justify-start"
-            )}
+            onClick={() => {
+              setMobileOpen(false);
+              onLogout();
+            }}
+            className="w-full justify-start text-muted-foreground hover:text-expense hover:bg-expense/10"
           >
-            <LogOut className="h-4 w-4" />
-            {!collapsed && <span className="ml-2">Sair</span>}
+            <LogOut className="h-4 w-4 mr-2" />
+            Sair
           </Button>
         )}
       </div>
-    </aside>
+    </>
+  );
+
+  return (
+    <>
+      {/* Mobile Header */}
+      <header className="lg:hidden fixed top-0 left-0 right-0 h-14 bg-sidebar-background border-b border-sidebar-border z-50 flex items-center justify-between px-4">
+        <Link to="/dashboard" className="flex items-center gap-2">
+          <div className="w-8 h-8 rounded-lg bg-primary/20 flex items-center justify-center">
+            <img src="/logo.png" alt="Uni Capital" className="h-5 w-5 object-contain" />
+          </div>
+          <span className="font-bold text-foreground">Uni Capital</span>
+        </Link>
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => setMobileOpen(!mobileOpen)}
+          className="text-foreground"
+        >
+          {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+        </Button>
+      </header>
+
+      {/* Mobile Overlay */}
+      {mobileOpen && (
+        <div
+          className="lg:hidden fixed inset-0 bg-black/50 z-40 animate-fade-in"
+          onClick={() => setMobileOpen(false)}
+        />
+      )}
+
+      {/* Mobile Sidebar */}
+      <aside
+        className={cn(
+          "lg:hidden fixed top-14 left-0 bottom-0 w-64 bg-sidebar-background border-r border-sidebar-border z-50 flex flex-col transition-transform duration-300",
+          mobileOpen ? "translate-x-0" : "-translate-x-full"
+        )}
+      >
+        <SidebarContent />
+      </aside>
+
+      {/* Desktop Sidebar */}
+      <aside className="hidden lg:flex fixed left-0 top-0 h-screen w-64 bg-sidebar-background border-r border-sidebar-border flex-col z-50">
+        <SidebarContent />
+      </aside>
+    </>
   );
 }
