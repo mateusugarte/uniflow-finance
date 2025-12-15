@@ -184,7 +184,7 @@ export function FinanceProvider({ children }: { children: ReactNode }) {
     const totalSaidas = saidas.reduce((sum, op) => sum + op.valor, 0);
     const totalVendas = vendas.reduce((sum, op) => sum + op.valor, 0);
     
-    // Saldo líquido com venda: entradas - saídas - vendas (vendas são empréstimos que saem temporariamente)
+    // Saldo líquido: entradas - saídas - vendas
     const saldoLiquido = totalEntradas - totalSaidas - totalVendas;
     // Saldo sem venda: entradas - saídas
     const saldoSemVenda = totalEntradas - totalSaidas;

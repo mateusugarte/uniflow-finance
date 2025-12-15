@@ -196,7 +196,7 @@ export default function Registrar() {
               </div>
               <div className="text-center">
                 <h3 className="text-xl font-bold text-orange-500">Venda</h3>
-                <p className="text-sm text-muted-foreground mt-1">Empréstimo / Venda</p>
+                <p className="text-sm text-muted-foreground mt-1">Saída temporária</p>
               </div>
             </div>
           </button>

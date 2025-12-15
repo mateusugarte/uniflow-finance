@@ -115,7 +115,7 @@ export default function Historico() {
         <StatCard
           title="Total de Vendas"
           value={formatCurrency(stats.totalVendas)}
-          subtitle={`${vendas.length} vendas (empréstimos)`}
+          subtitle={`${vendas.length} vendas`}
           icon={ShoppingBag}
           variant="sales"
           delay={200}
