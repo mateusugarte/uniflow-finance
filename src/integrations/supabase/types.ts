@@ -14,6 +14,24 @@ export type Database = {
   }
   public: {
     Tables: {
+      bancos: {
+        Row: {
+          icone: string | null
+          id: string
+          nome: string
+        }
+        Insert: {
+          icone?: string | null
+          id?: string
+          nome: string
+        }
+        Update: {
+          icone?: string | null
+          id?: string
+          nome?: string
+        }
+        Relationships: []
+      }
       documents: {
         Row: {
           content: string | null
@@ -35,6 +53,45 @@ export type Database = {
           fts?: unknown
           id?: never
           metadata?: Json | null
+        }
+        Relationships: []
+      }
+      operacoes: {
+        Row: {
+          banco: string
+          created_at: string
+          data: string
+          descricao: string
+          hora: string
+          id: string
+          tipo: string
+          updated_at: string
+          user_id: string
+          valor: number
+        }
+        Insert: {
+          banco: string
+          created_at?: string
+          data: string
+          descricao: string
+          hora?: string
+          id?: string
+          tipo: string
+          updated_at?: string
+          user_id: string
+          valor: number
+        }
+        Update: {
+          banco?: string
+          created_at?: string
+          data?: string
+          descricao?: string
+          hora?: string
+          id?: string
+          tipo?: string
+          updated_at?: string
+          user_id?: string
+          valor?: number
         }
         Relationships: []
       }
