@@ -36,7 +36,7 @@ export function Sidebar() {
   const SidebarContent = () => {
     const [dropdownOpen, setDropdownOpen] = useState(false);
 
-    const allowedUserNames = new Set(["RP1", "RP2", "RP3"]);
+    const allowedUserNames = new Set(["RP1", "RP2", "RP4"]);
     const switchableUsers = allUsers.filter((u) => allowedUserNames.has((u.nome || "").trim()));
 
     return (
