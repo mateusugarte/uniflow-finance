@@ -9,6 +9,7 @@ export interface Operation {
   banco: string;
   data: string;
   hora: string;
+  is_venda: boolean;
   created_at: string;
   updated_at: string;
 }
@@ -20,6 +21,7 @@ export interface OperationFormData {
   banco: string;
   data: string;
   hora: string;
+  is_venda?: boolean;
 }
 
 export interface MonthlyStats {
