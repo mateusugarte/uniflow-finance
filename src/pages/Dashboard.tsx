@@ -98,7 +98,7 @@ export default function Dashboard() {
           className="cursor-pointer transition-transform hover:scale-[1.02]"
         >
           <StatCard
-            title="Vendas (Empréstimos)"
+            title="Vendas"
             value={formatCurrency(stats.totalVendas)}
             subtitle={`${vendas.length} vendas • Clique para ver detalhes`}
             icon={ShoppingBag}
