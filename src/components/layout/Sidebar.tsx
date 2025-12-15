@@ -6,10 +6,13 @@ import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useUserSwitch } from "@/contexts/UserSwitchContext";
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const navItems = [
   { path: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -22,7 +25,7 @@ export function Sidebar() {
   const { signOut } = useAuth();
   const { selectedUserProfile, allUsers, switchUser, selectedUserId } = useUserSwitch();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [userPopoverOpen, setUserPopoverOpen] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const handleLogout = async () => {
     await signOut();
@@ -33,7 +36,7 @@ export function Sidebar() {
 
   const handleSwitchUser = (userId: string) => {
     switchUser(userId);
-    setUserPopoverOpen(false);
+    setDropdownOpen(false);
   };
 
   const SidebarContent = () => (
@@ -93,8 +96,8 @@ export function Sidebar() {
       {/* Footer with User Info */}
       <div className="p-4 mt-auto">
         {/* User Switcher */}
-        <Popover open={userPopoverOpen} onOpenChange={setUserPopoverOpen}>
-          <PopoverTrigger asChild>
+        <DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>
+          <DropdownMenuTrigger asChild>
             <button 
               type="button"
               className="w-full px-3 py-3 mb-3 rounded-xl bg-secondary/50 border border-border/50 hover:bg-secondary/70 transition-colors text-left cursor-pointer"
@@ -109,35 +112,33 @@ export function Sidebar() {
                 </div>
                 <ChevronDown className={cn(
                   "h-4 w-4 text-muted-foreground flex-shrink-0 transition-transform duration-200",
-                  userPopoverOpen && "rotate-180"
+                  dropdownOpen && "rotate-180"
                 )} />
               </div>
               <p className="text-xs text-primary mt-2 pl-12">Trocar usuário</p>
             </button>
-          </PopoverTrigger>
-          <PopoverContent 
-            className="w-64 p-2 z-[100]" 
-            align="start" 
-            side="top"
+          </DropdownMenuTrigger>
+          <DropdownMenuContent 
+            className="w-64 bg-popover border-border z-[200]" 
+            side="top" 
+            align="start"
             sideOffset={8}
           >
-            <p className="text-xs font-medium text-muted-foreground px-2 py-1 mb-1">Selecione um usuário</p>
+            <DropdownMenuLabel className="text-xs text-muted-foreground">Selecione um usuário</DropdownMenuLabel>
+            <DropdownMenuSeparator />
             {allUsers.length === 0 ? (
               <p className="text-sm text-muted-foreground px-2 py-2">Carregando usuários...</p>
             ) : (
-              <div className="max-h-[200px] overflow-y-auto space-y-1">
-                {allUsers.map((userProfile) => (
-                  <button
-                    key={userProfile.id}
-                    type="button"
-                    onClick={() => handleSwitchUser(userProfile.id)}
-                    className={cn(
-                      "w-full flex items-center gap-3 px-2 py-2 rounded-lg text-left transition-colors cursor-pointer",
-                      selectedUserId === userProfile.id
-                        ? "bg-primary/10 text-primary"
-                        : "hover:bg-accent text-foreground"
-                    )}
-                  >
+              allUsers.map((userProfile) => (
+                <DropdownMenuItem
+                  key={userProfile.id}
+                  onClick={() => handleSwitchUser(userProfile.id)}
+                  className={cn(
+                    "cursor-pointer",
+                    selectedUserId === userProfile.id && "bg-primary/10 text-primary"
+                  )}
+                >
+                  <div className="flex items-center gap-3 w-full">
                     <div className="w-7 h-7 rounded-md bg-secondary flex items-center justify-center flex-shrink-0">
                       <User className="h-3.5 w-3.5" />
                     </div>
@@ -150,12 +151,12 @@ export function Sidebar() {
                     {selectedUserId === userProfile.id && (
                       <Check className="h-4 w-4 text-primary flex-shrink-0" />
                     )}
-                  </button>
-                ))}
-              </div>
+                  </div>
+                </DropdownMenuItem>
+              ))
             )}
-          </PopoverContent>
-        </Popover>
+          </DropdownMenuContent>
+        </DropdownMenu>
 
         <div className="mx-2 mb-4 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
         <Button
