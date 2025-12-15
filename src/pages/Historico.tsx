@@ -32,6 +32,8 @@ import {
   Activity,
   Search,
   Wallet,
+  ShoppingBag,
+  Receipt,
 } from "lucide-react";
 
 export default function Historico() {
@@ -61,12 +63,20 @@ export default function Historico() {
     }
   };
 
-  const avgTicket = stats.totalOperacoes > 0
-    ? (stats.totalEntradas + stats.totalSaidas) / stats.totalOperacoes
-    : 0;
-
   const entradas = allOperations.filter(op => op.tipo === "entrada");
   const saidas = allOperations.filter(op => op.tipo === "saida");
+  const vendas = allOperations.filter(op => op.tipo === "venda");
+
+  // Cálculos de ticket médio por tipo
+  const ticketMedioEntradas = entradas.length > 0 
+    ? stats.totalEntradas / entradas.length 
+    : 0;
+  const ticketMedioSaidas = saidas.length > 0 
+    ? stats.totalSaidas / saidas.length 
+    : 0;
+  const ticketMedioVendas = vendas.length > 0 
+    ? stats.totalVendas / vendas.length 
+    : 0;
 
   return (
     <div className="space-y-6">
@@ -84,8 +94,8 @@ export default function Historico() {
         />
       </div>
 
-      {/* Summary Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      {/* Summary Cards - Entradas, Saídas, Vendas */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <StatCard
           title="Total de Entradas"
           value={formatCurrency(stats.totalEntradas)}
@@ -103,45 +113,105 @@ export default function Historico() {
           delay={100}
         />
         <StatCard
-          title="Total de Operações"
-          value={stats.totalOperacoes.toString()}
-          icon={Activity}
+          title="Total de Vendas"
+          value={formatCurrency(stats.totalVendas)}
+          subtitle={`${vendas.length} vendas (empréstimos)`}
+          icon={ShoppingBag}
+          variant="sales"
           delay={200}
-        />
-        <StatCard
-          title="Ticket Médio"
-          value={formatCurrency(avgTicket)}
-          subtitle="por operação"
-          icon={BarChart3}
-          delay={300}
         />
       </div>
 
-      {/* Main Balance Card */}
-      <div className="bg-balance/20 border border-balance/30 rounded-xl p-6 animate-slide-up" style={{ animationDelay: "400ms" }}>
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      {/* Balance Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="bg-balance/20 border border-balance/30 rounded-xl p-6 animate-slide-up" style={{ animationDelay: "300ms" }}>
           <div className="flex items-center gap-4">
             <div className="p-3 rounded-lg bg-balance text-balance-foreground">
               <Wallet className="h-6 w-6" />
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Saldo do Período</p>
-              <p className="text-3xl font-bold text-balance">
+              <p className="text-sm text-muted-foreground">Saldo Sem Venda</p>
+              <p className="text-2xl font-bold text-balance">
+                {formatCurrency(stats.saldoSemVenda)}
+              </p>
+              <p className="text-xs text-muted-foreground mt-1">Entradas - Saídas</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-card border border-border rounded-xl p-6 animate-slide-up" style={{ animationDelay: "350ms" }}>
+          <div className="flex items-center gap-4">
+            <div className="p-3 rounded-lg bg-muted">
+              <Wallet className="h-6 w-6 text-muted-foreground" />
+            </div>
+            <div>
+              <p className="text-sm text-muted-foreground">Saldo Com Venda</p>
+              <p className="text-2xl font-bold text-foreground">
                 {formatCurrency(stats.saldoLiquido)}
+              </p>
+              <p className="text-xs text-muted-foreground mt-1">Entradas - Saídas - Vendas</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Ticket Médio por Tipo */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <StatCard
+          title="Ticket Médio Entradas"
+          value={formatCurrency(ticketMedioEntradas)}
+          subtitle="por entrada"
+          icon={TrendingUp}
+          delay={400}
+        />
+        <StatCard
+          title="Ticket Médio Saídas"
+          value={formatCurrency(ticketMedioSaidas)}
+          subtitle="por saída"
+          icon={TrendingDown}
+          delay={450}
+        />
+        <StatCard
+          title="Ticket Médio Vendas"
+          value={formatCurrency(ticketMedioVendas)}
+          subtitle="por venda"
+          icon={ShoppingBag}
+          delay={500}
+        />
+        <StatCard
+          title="Total de Operações"
+          value={stats.totalOperacoes.toString()}
+          subtitle="no período"
+          icon={Activity}
+          delay={550}
+        />
+      </div>
+
+      {/* Taxa de Economia */}
+      <div className="bg-card border border-border rounded-xl p-6 animate-slide-up" style={{ animationDelay: "600ms" }}>
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div className="flex items-center gap-4">
+            <div className="p-3 rounded-lg bg-primary/20 text-primary">
+              <Receipt className="h-6 w-6" />
+            </div>
+            <div>
+              <p className="text-sm text-muted-foreground">Taxa de Economia</p>
+              <p className="text-2xl font-bold text-foreground">
+                {formatPercent(stats.taxaEconomia)}
               </p>
             </div>
           </div>
           <div className="text-right">
-            <p className="text-sm text-muted-foreground">Taxa de Economia</p>
-            <p className="text-2xl font-bold text-foreground">
-              {formatPercent(stats.taxaEconomia)}
+            <p className="text-sm text-muted-foreground">Média de Gasto Diário</p>
+            <p className="text-xl font-bold text-foreground">
+              {formatCurrency(stats.mediaGastoDiario)}
             </p>
           </div>
         </div>
       </div>
 
       {/* Search */}
-      <div className="relative animate-fade-in" style={{ animationDelay: "450ms" }}>
+      <div className="relative animate-fade-in" style={{ animationDelay: "650ms" }}>
         <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
         <Input
           placeholder="Buscar por descrição ou banco..."
@@ -152,7 +222,7 @@ export default function Historico() {
       </div>
 
       {/* Operations Table */}
-      <div className="bg-card border border-border rounded-xl p-5 animate-slide-up" style={{ animationDelay: "500ms" }}>
+      <div className="bg-card border border-border rounded-xl p-5 animate-slide-up" style={{ animationDelay: "700ms" }}>
         <h2 className="text-base font-semibold text-foreground mb-4">
           Todas as Operações ({filteredOperations.length})
         </h2>
@@ -163,7 +233,7 @@ export default function Historico() {
               <div 
                 key={operation.id} 
                 className="animate-slide-up"
-                style={{ animationDelay: `${550 + index * 50}ms` }}
+                style={{ animationDelay: `${750 + index * 50}ms` }}
               >
                 <OperationItem
                   operation={operation}
