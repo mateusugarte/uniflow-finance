@@ -15,7 +15,6 @@ import {
 import { ArrowUpCircle, ArrowDownCircle, ArrowLeft, Loader2, Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
-import { toast } from "sonner";
 
 export default function Registrar() {
   const navigate = useNavigate();
@@ -99,7 +98,6 @@ export default function Registrar() {
   };
 
   const formatCurrencyInput = (value: string) => {
-    // Remove non-numeric characters except decimal point
     const cleaned = value.replace(/[^\d.]/g, "");
     return cleaned;
   };
@@ -107,13 +105,13 @@ export default function Registrar() {
   return (
     <div className="max-w-2xl mx-auto">
       {/* Header */}
-      <div className="flex items-center gap-4 mb-8">
-        <Button variant="ghost" size="icon" onClick={handleBack}>
+      <div className="flex items-center gap-4 mb-6 animate-fade-in">
+        <Button variant="ghost" size="icon" onClick={handleBack} className="hover:bg-accent">
           <ArrowLeft className="h-5 w-5" />
         </Button>
         <div>
-          <h1 className="text-3xl font-bold text-foreground">Registrar Operação</h1>
-          <p className="text-muted-foreground mt-1">
+          <h1 className="text-2xl font-bold text-foreground">Registrar Operação</h1>
+          <p className="text-muted-foreground text-sm mt-1">
             {step === 1 ? "Selecione o tipo de operação" : `Registrar ${tipo === "entrada" ? "Entrada" : "Saída"}`}
           </p>
         </div>
@@ -121,63 +119,62 @@ export default function Registrar() {
 
       {/* Step 1: Select Type */}
       {step === 1 && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 animate-fade-in">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 animate-slide-up">
           <button
             onClick={() => handleSelectType("entrada")}
-            className="group relative overflow-hidden rounded-2xl p-8 card-income text-income-foreground transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl"
+            className="group relative overflow-hidden rounded-xl p-6 bg-income/15 border border-income/30 text-foreground transition-all duration-300 hover:scale-[1.02] hover:bg-income/25 hover:border-income/50"
           >
-            <div className="relative z-10 flex flex-col items-center gap-4">
-              <div className="p-4 rounded-2xl bg-white/20">
-                <ArrowUpCircle className="h-12 w-12" />
+            <div className="relative z-10 flex flex-col items-center gap-3">
+              <div className="p-3 rounded-xl bg-income text-income-foreground">
+                <ArrowUpCircle className="h-8 w-8" />
               </div>
               <div className="text-center">
-                <h3 className="text-2xl font-bold">Entrada</h3>
-                <p className="text-sm opacity-90 mt-1">Dinheiro que entra</p>
+                <h3 className="text-xl font-bold text-income">Entrada</h3>
+                <p className="text-sm text-muted-foreground mt-1">Dinheiro que entra</p>
               </div>
             </div>
-            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
           </button>
 
           <button
             onClick={() => handleSelectType("saida")}
-            className="group relative overflow-hidden rounded-2xl p-8 card-expense text-expense-foreground transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl"
+            className="group relative overflow-hidden rounded-xl p-6 bg-expense/15 border border-expense/30 text-foreground transition-all duration-300 hover:scale-[1.02] hover:bg-expense/25 hover:border-expense/50"
           >
-            <div className="relative z-10 flex flex-col items-center gap-4">
-              <div className="p-4 rounded-2xl bg-white/20">
-                <ArrowDownCircle className="h-12 w-12" />
+            <div className="relative z-10 flex flex-col items-center gap-3">
+              <div className="p-3 rounded-xl bg-expense text-expense-foreground">
+                <ArrowDownCircle className="h-8 w-8" />
               </div>
               <div className="text-center">
-                <h3 className="text-2xl font-bold">Saída</h3>
-                <p className="text-sm opacity-90 mt-1">Dinheiro que sai</p>
+                <h3 className="text-xl font-bold text-expense">Saída</h3>
+                <p className="text-sm text-muted-foreground mt-1">Dinheiro que sai</p>
               </div>
             </div>
-            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
           </button>
         </div>
       )}
 
       {/* Step 2: Form */}
       {step === 2 && tipo && (
-        <form onSubmit={handleSubmit} className="space-y-6 animate-fade-in">
+        <form onSubmit={handleSubmit} className="space-y-5 animate-slide-up">
           <div
             className={cn(
-              "rounded-2xl p-6 mb-6",
-              tipo === "entrada" ? "card-income" : "card-expense"
+              "rounded-xl p-4 mb-4 flex items-center gap-3",
+              tipo === "entrada" ? "bg-income/20 border border-income/30" : "bg-expense/20 border border-expense/30"
             )}
           >
-            <div className="flex items-center gap-3 text-white">
-              {tipo === "entrada" ? (
-                <ArrowUpCircle className="h-6 w-6" />
-              ) : (
-                <ArrowDownCircle className="h-6 w-6" />
-              )}
-              <span className="font-semibold text-lg">
-                {tipo === "entrada" ? "Nova Entrada" : "Nova Saída"}
-              </span>
-            </div>
+            {tipo === "entrada" ? (
+              <ArrowUpCircle className="h-5 w-5 text-income" />
+            ) : (
+              <ArrowDownCircle className="h-5 w-5 text-expense" />
+            )}
+            <span className={cn(
+              "font-semibold",
+              tipo === "entrada" ? "text-income" : "text-expense"
+            )}>
+              {tipo === "entrada" ? "Nova Entrada" : "Nova Saída"}
+            </span>
           </div>
 
-          <div className="bg-card border border-border rounded-2xl p-6 space-y-6">
+          <div className="bg-card border border-border rounded-xl p-5 space-y-5">
             {/* Valor */}
             <div className="space-y-2">
               <Label htmlFor="valor" className="text-foreground font-medium">
@@ -198,7 +195,7 @@ export default function Registrar() {
                     setFormData({ ...formData, valor: formatCurrencyInput(e.target.value) })
                   }
                   className={cn(
-                    "pl-12 h-12 text-lg font-semibold",
+                    "pl-12 h-11 text-lg font-semibold",
                     errors.valor && "border-destructive"
                   )}
                 />
@@ -221,7 +218,7 @@ export default function Registrar() {
                   setFormData({ ...formData, descricao: e.target.value })
                 }
                 maxLength={100}
-                className={cn("h-12", errors.descricao && "border-destructive")}
+                className={cn("h-11", errors.descricao && "border-destructive")}
               />
               <div className="flex justify-between">
                 {errors.descricao && (
@@ -243,7 +240,7 @@ export default function Registrar() {
                 onValueChange={(value) => setFormData({ ...formData, banco: value })}
               >
                 <SelectTrigger
-                  className={cn("h-12", errors.banco && "border-destructive")}
+                  className={cn("h-11", errors.banco && "border-destructive")}
                 >
                   <SelectValue placeholder="Selecione o banco" />
                 </SelectTrigger>
@@ -274,7 +271,7 @@ export default function Registrar() {
                   onChange={(e) =>
                     setFormData({ ...formData, data: e.target.value })
                   }
-                  className={cn("h-12", errors.data && "border-destructive")}
+                  className={cn("h-11", errors.data && "border-destructive")}
                 />
                 {errors.data && (
                   <p className="text-sm text-destructive">{errors.data}</p>
@@ -291,14 +288,14 @@ export default function Registrar() {
                   onChange={(e) =>
                     setFormData({ ...formData, hora: e.target.value })
                   }
-                  className="h-12"
+                  className="h-11"
                 />
               </div>
             </div>
           </div>
 
           {/* Submit Buttons */}
-          <div className="flex gap-4">
+          <div className="flex gap-3">
             <Button
               type="button"
               variant="outline"
@@ -317,12 +314,12 @@ export default function Registrar() {
             >
               {isLoading ? (
                 <>
-                  <Loader2 className="h-5 w-5 animate-spin" />
+                  <Loader2 className="h-4 w-4 animate-spin" />
                   Registrando...
                 </>
               ) : (
                 <>
-                  <Check className="h-5 w-5" />
+                  <Check className="h-4 w-4" />
                   Registrar {tipo === "entrada" ? "Entrada" : "Saída"}
                 </>
               )}

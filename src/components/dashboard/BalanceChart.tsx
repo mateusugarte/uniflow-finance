@@ -45,27 +45,27 @@ export function BalanceChart({ data, className }: BalanceChartProps) {
         <AreaChart data={chartData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
           <defs>
             <linearGradient id="colorBalance" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="hsl(220, 70%, 45%)" stopOpacity={0.3} />
-              <stop offset="100%" stopColor="hsl(220, 70%, 45%)" stopOpacity={0.02} />
+              <stop offset="0%" stopColor="hsl(215, 80%, 55%)" stopOpacity={0.4} />
+              <stop offset="100%" stopColor="hsl(215, 80%, 55%)" stopOpacity={0.05} />
             </linearGradient>
           </defs>
           <CartesianGrid
             strokeDasharray="3 3"
             vertical={false}
-            stroke="hsl(var(--border))"
-            opacity={0.6}
+            stroke="hsl(220, 15%, 22%)"
+            opacity={0.8}
           />
           <XAxis
             dataKey="data"
             axisLine={false}
             tickLine={false}
-            tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 11 }}
+            tick={{ fill: "hsl(215, 15%, 60%)", fontSize: 11 }}
             tickMargin={8}
           />
           <YAxis
             axisLine={false}
             tickLine={false}
-            tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 11 }}
+            tick={{ fill: "hsl(215, 15%, 60%)", fontSize: 11 }}
             tickFormatter={(value) => formatCurrency(value, true)}
             domain={[minValue - padding, maxValue + padding]}
             width={70}
@@ -75,9 +75,9 @@ export function BalanceChart({ data, className }: BalanceChartProps) {
               if (active && payload && payload.length) {
                 const value = payload[0].value as number;
                 return (
-                  <div className="bg-card border border-border rounded-lg shadow-md p-3">
+                  <div className="bg-card border border-border rounded-lg shadow-xl p-3 animate-scale-in">
                     <p className="text-xs text-muted-foreground mb-1">Dia {label}</p>
-                    <p className={`text-base font-semibold ${value >= 0 ? 'text-income' : 'text-expense'}`}>
+                    <p className={`text-lg font-bold ${value >= 0 ? 'text-income' : 'text-expense'}`}>
                       {formatCurrency(value)}
                     </p>
                   </div>
@@ -89,10 +89,10 @@ export function BalanceChart({ data, className }: BalanceChartProps) {
           <Area
             type="monotone"
             dataKey="saldo"
-            stroke="hsl(220, 70%, 45%)"
-            strokeWidth={2}
+            stroke="hsl(215, 80%, 55%)"
+            strokeWidth={2.5}
             fill="url(#colorBalance)"
-            animationDuration={800}
+            animationDuration={1000}
             animationEasing="ease-out"
           />
         </AreaChart>

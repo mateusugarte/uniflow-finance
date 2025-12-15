@@ -31,7 +31,7 @@ import {
   TrendingDown,
   Activity,
   Search,
-  Clock,
+  Wallet,
 } from "lucide-react";
 
 export default function Historico() {
@@ -65,7 +65,6 @@ export default function Historico() {
     }
   };
 
-  // Calculate some extra stats
   const avgTicket = stats.totalOperacoes > 0
     ? (stats.totalEntradas + stats.totalSaidas) / stats.totalOperacoes
     : 0;
@@ -74,12 +73,12 @@ export default function Historico() {
   const saidas = allOperations.filter(op => op.tipo === "saida");
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 animate-fade-in">
         <div>
-          <h1 className="text-3xl font-bold text-foreground">Histórico</h1>
-          <p className="text-muted-foreground mt-1">
+          <h1 className="text-2xl font-bold text-foreground">Histórico</h1>
+          <p className="text-muted-foreground text-sm mt-1">
             Análise detalhada das suas operações
           </p>
         </div>
@@ -121,60 +120,65 @@ export default function Historico() {
       </div>
 
       {/* Main Balance Card */}
-      <div className="card-balance rounded-2xl p-8 text-balance-foreground animate-slide-up" style={{ animationDelay: "400ms" }}>
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-          <div>
-            <p className="text-lg opacity-90">Saldo do Período</p>
-            <p className="text-4xl md:text-5xl font-bold mt-2">
-              {formatCurrency(stats.saldoLiquido)}
-            </p>
-          </div>
-          <div className="flex flex-col gap-2 text-right">
-            <div className="flex items-center gap-2 justify-end opacity-90">
-              <Clock className="h-4 w-4" />
-              <span className="text-sm">Taxa de Economia</span>
+      <div className="bg-balance/20 border border-balance/30 rounded-xl p-6 animate-slide-up" style={{ animationDelay: "400ms" }}>
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div className="flex items-center gap-4">
+            <div className="p-3 rounded-lg bg-balance text-balance-foreground">
+              <Wallet className="h-6 w-6" />
             </div>
-            <p className="text-3xl font-bold">
+            <div>
+              <p className="text-sm text-muted-foreground">Saldo do Período</p>
+              <p className="text-3xl font-bold text-balance">
+                {formatCurrency(stats.saldoLiquido)}
+              </p>
+            </div>
+          </div>
+          <div className="text-right">
+            <p className="text-sm text-muted-foreground">Taxa de Economia</p>
+            <p className="text-2xl font-bold text-foreground">
               {formatPercent(stats.taxaEconomia)}
             </p>
           </div>
         </div>
       </div>
 
-      {/* Search and Filter */}
-      <div className="flex flex-col sm:flex-row gap-4">
-        <div className="relative flex-1">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <Input
-            placeholder="Buscar por descrição ou banco..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="pl-10 h-12 bg-card"
-          />
-        </div>
+      {/* Search */}
+      <div className="relative animate-fade-in" style={{ animationDelay: "450ms" }}>
+        <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+        <Input
+          placeholder="Buscar por descrição ou banco..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="pl-10 h-11 bg-card"
+        />
       </div>
 
       {/* Operations Table */}
-      <div className="bg-card border border-border rounded-2xl p-6 shadow-md animate-slide-up" style={{ animationDelay: "500ms" }}>
-        <h2 className="text-lg font-semibold text-foreground mb-4">
+      <div className="bg-card border border-border rounded-xl p-5 animate-slide-up" style={{ animationDelay: "500ms" }}>
+        <h2 className="text-base font-semibold text-foreground mb-4">
           Todas as Operações ({filteredOperations.length})
         </h2>
         
         {filteredOperations.length > 0 ? (
-          <div className="space-y-3">
-            {filteredOperations.map((operation) => (
-              <OperationItem
-                key={operation.id}
-                operation={operation}
-                onEdit={setSelectedOperation}
-                onDelete={(id) => setDeleteId(id)}
-              />
+          <div className="space-y-2">
+            {filteredOperations.map((operation, index) => (
+              <div 
+                key={operation.id} 
+                className="animate-slide-up"
+                style={{ animationDelay: `${550 + index * 50}ms` }}
+              >
+                <OperationItem
+                  operation={operation}
+                  onEdit={setSelectedOperation}
+                  onDelete={(id) => setDeleteId(id)}
+                />
+              </div>
             ))}
           </div>
         ) : (
-          <div className="text-center py-12 text-muted-foreground">
-            <BarChart3 className="h-12 w-12 mx-auto mb-4 opacity-50" />
-            <p className="text-lg">Nenhuma operação encontrada</p>
+          <div className="text-center py-10 text-muted-foreground">
+            <BarChart3 className="h-10 w-10 mx-auto mb-3 opacity-50" />
+            <p className="text-base">Nenhuma operação encontrada</p>
             <p className="text-sm">
               {search ? "Tente alterar os filtros de busca" : "Registre suas primeiras operações"}
             </p>
