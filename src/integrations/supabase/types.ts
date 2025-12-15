@@ -176,36 +176,6 @@ export type Database = {
         }
         Relationships: []
       }
-      "uni-capital": {
-        Row: {
-          banco: string | null
-          data: string | null
-          id: string
-          mes: number | null
-          nome: string | null
-          tipo: string | null
-          valor: string | null
-        }
-        Insert: {
-          banco?: string | null
-          data?: string | null
-          id?: string
-          mes?: number | null
-          nome?: string | null
-          tipo?: string | null
-          valor?: string | null
-        }
-        Update: {
-          banco?: string | null
-          data?: string | null
-          id?: string
-          mes?: number | null
-          nome?: string | null
-          tipo?: string | null
-          valor?: string | null
-        }
-        Relationships: []
-      }
       usuarios: {
         Row: {
           cpf: string | null
