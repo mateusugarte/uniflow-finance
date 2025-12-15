@@ -1,5 +1,6 @@
 import { Outlet } from "react-router-dom";
-import { Header } from "./Header";
+import { Sidebar } from "./Sidebar";
+import { useState } from "react";
 
 interface AppLayoutProps {
   onLogout?: () => void;
@@ -7,10 +8,12 @@ interface AppLayoutProps {
 
 export function AppLayout({ onLogout }: AppLayoutProps) {
   return (
-    <div className="min-h-screen flex flex-col">
-      <Header onLogout={onLogout} />
-      <main className="flex-1 container mx-auto px-4 py-6">
-        <Outlet />
+    <div className="min-h-screen flex bg-background">
+      <Sidebar onLogout={onLogout} />
+      <main className="flex-1 ml-64 p-6 transition-all duration-300">
+        <div className="max-w-7xl mx-auto animate-fade-in">
+          <Outlet />
+        </div>
       </main>
     </div>
   );

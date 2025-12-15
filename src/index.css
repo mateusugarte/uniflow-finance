@@ -6,113 +6,100 @@
 
 @layer base {
   :root {
-    /* Primary - Deep Navy Blue */
-    --primary: 220 70% 35%;
-    --primary-foreground: 0 0% 100%;
-    
-    /* Background - Clean White */
-    --background: 0 0% 98%;
-    --foreground: 220 25% 15%;
-    
-    /* Card surfaces */
-    --card: 0 0% 100%;
-    --card-foreground: 220 25% 15%;
-    
-    --popover: 0 0% 100%;
-    --popover-foreground: 220 25% 15%;
-    
-    /* Secondary - Light Blue Gray */
-    --secondary: 215 25% 94%;
-    --secondary-foreground: 220 70% 35%;
-    
-    /* Muted */
-    --muted: 215 20% 95%;
-    --muted-foreground: 215 15% 50%;
-    
-    /* Accent - Light Blue */
-    --accent: 210 50% 95%;
-    --accent-foreground: 220 70% 35%;
-    
-    /* Finance Colors */
-    --income: 145 60% 40%;
-    --income-foreground: 0 0% 100%;
-    --expense: 0 65% 50%;
-    --expense-foreground: 0 0% 100%;
-    --balance: 220 70% 45%;
-    --balance-foreground: 0 0% 100%;
-    
-    /* Destructive */
-    --destructive: 0 65% 50%;
-    --destructive-foreground: 0 0% 100%;
-    
-    /* Borders & Inputs */
-    --border: 215 20% 88%;
-    --input: 215 20% 88%;
-    --ring: 220 70% 35%;
-    
-    --radius: 0.75rem;
-    
-    /* Shadows */
-    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.04);
-    --shadow-md: 0 4px 12px -2px rgba(0, 0, 0, 0.08);
-    --shadow-lg: 0 12px 24px -4px rgba(0, 0, 0, 0.1);
-    
-    /* Sidebar */
-    --sidebar-background: 0 0% 100%;
-    --sidebar-foreground: 220 25% 15%;
-    --sidebar-primary: 220 70% 35%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 210 50% 95%;
-    --sidebar-accent-foreground: 220 70% 35%;
-    --sidebar-border: 215 20% 88%;
-    --sidebar-ring: 220 70% 35%;
-  }
-
-  .dark {
-    --primary: 215 70% 55%;
+    /* Light mode - keeping for future toggle */
+    --primary: 215 80% 50%;
     --primary-foreground: 0 0% 100%;
     
     --background: 220 25% 10%;
-    --foreground: 210 20% 95%;
+    --foreground: 210 20% 98%;
     
-    --card: 220 20% 14%;
-    --card-foreground: 210 20% 95%;
+    --card: 220 25% 13%;
+    --card-foreground: 210 20% 98%;
     
-    --popover: 220 20% 14%;
-    --popover-foreground: 210 20% 95%;
+    --popover: 220 25% 13%;
+    --popover-foreground: 210 20% 98%;
     
     --secondary: 220 20% 18%;
-    --secondary-foreground: 215 70% 55%;
+    --secondary-foreground: 210 20% 98%;
     
     --muted: 220 15% 20%;
     --muted-foreground: 215 15% 60%;
     
-    --accent: 220 25% 20%;
-    --accent-foreground: 215 70% 55%;
+    --accent: 215 50% 20%;
+    --accent-foreground: 210 20% 98%;
     
-    /* Finance Colors - Dark mode */
-    --income: 145 55% 45%;
+    /* Finance Colors */
+    --income: 145 60% 45%;
     --income-foreground: 0 0% 100%;
-    --expense: 0 60% 55%;
+    --expense: 0 65% 55%;
     --expense-foreground: 0 0% 100%;
-    --balance: 215 70% 55%;
+    --balance: 215 80% 55%;
     --balance-foreground: 0 0% 100%;
     
-    --destructive: 0 55% 50%;
+    --destructive: 0 65% 55%;
     --destructive-foreground: 0 0% 100%;
     
     --border: 220 15% 22%;
     --input: 220 15% 22%;
-    --ring: 215 70% 55%;
+    --ring: 215 80% 50%;
     
-    --sidebar-background: 220 20% 14%;
-    --sidebar-foreground: 210 20% 95%;
-    --sidebar-primary: 215 70% 55%;
+    --radius: 0.75rem;
+    
+    /* Sidebar */
+    --sidebar-background: 220 30% 8%;
+    --sidebar-foreground: 210 20% 98%;
+    --sidebar-primary: 215 80% 55%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 220 25% 20%;
-    --sidebar-accent-foreground: 215 70% 55%;
-    --sidebar-border: 220 15% 22%;
-    --sidebar-ring: 215 70% 55%;
+    --sidebar-accent: 215 50% 18%;
+    --sidebar-accent-foreground: 210 20% 98%;
+    --sidebar-border: 220 20% 15%;
+    --sidebar-ring: 215 80% 50%;
+  }
+
+  .dark {
+    --primary: 215 80% 55%;
+    --primary-foreground: 0 0% 100%;
+    
+    --background: 220 25% 10%;
+    --foreground: 210 20% 98%;
+    
+    --card: 220 25% 13%;
+    --card-foreground: 210 20% 98%;
+    
+    --popover: 220 25% 13%;
+    --popover-foreground: 210 20% 98%;
+    
+    --secondary: 220 20% 18%;
+    --secondary-foreground: 210 20% 98%;
+    
+    --muted: 220 15% 20%;
+    --muted-foreground: 215 15% 60%;
+    
+    --accent: 215 50% 20%;
+    --accent-foreground: 210 20% 98%;
+    
+    --income: 145 60% 50%;
+    --income-foreground: 0 0% 100%;
+    --expense: 0 65% 55%;
+    --expense-foreground: 0 0% 100%;
+    --balance: 215 80% 60%;
+    --balance-foreground: 0 0% 100%;
+    
+    --destructive: 0 60% 55%;
+    --destructive-foreground: 0 0% 100%;
+    
+    --border: 220 15% 22%;
+    --input: 220 15% 22%;
+    --ring: 215 80% 55%;
+    
+    --sidebar-background: 220 30% 8%;
+    --sidebar-foreground: 210 20% 98%;
+    --sidebar-primary: 215 80% 55%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 215 50% 18%;
+    --sidebar-accent-foreground: 210 20% 98%;
+    --sidebar-border: 220 20% 15%;
+    --sidebar-ring: 215 80% 55%;
   }
 }
 
@@ -151,26 +138,45 @@
   
   /* Animations */
   .animate-slide-up {
-    animation: slide-up 0.4s ease-out;
+    animation: slide-up 0.5s ease-out forwards;
+  }
+  
+  .animate-slide-in-left {
+    animation: slide-in-left 0.4s ease-out forwards;
   }
   
   .animate-fade-in {
-    animation: fade-in 0.3s ease-out;
+    animation: fade-in 0.4s ease-out forwards;
   }
   
   .animate-scale-in {
-    animation: scale-in 0.3s ease-out;
+    animation: scale-in 0.3s ease-out forwards;
+  }
+  
+  .animate-pulse-soft {
+    animation: pulse-soft 2s ease-in-out infinite;
   }
 }
 
 @keyframes slide-up {
   from {
     opacity: 0;
-    transform: translateY(16px);
+    transform: translateY(20px);
   }
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes slide-in-left {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
   }
 }
 
@@ -186,7 +192,7 @@
 @keyframes scale-in {
   from {
     opacity: 0;
-    transform: scale(0.96);
+    transform: scale(0.95);
   }
   to {
     opacity: 1;
@@ -194,22 +200,38 @@
   }
 }
 
-/* Scrollbar styling */
+@keyframes pulse-soft {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+/* Scrollbar styling for dark theme */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 8px;
+  height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: hsl(var(--muted));
-  border-radius: 3px;
+  background: hsl(220, 25%, 12%);
+  border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: hsl(var(--muted-foreground) / 0.3);
-  border-radius: 3px;
+  background: hsl(215, 15%, 30%);
+  border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: hsl(var(--muted-foreground) / 0.5);
+  background: hsl(215, 15%, 40%);
+}
+
+/* Smooth transitions */
+* {
+  transition-property: background-color, border-color, color, fill, stroke;
+  transition-timing-function: ease;
+  transition-duration: 150ms;
 }

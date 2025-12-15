@@ -21,47 +21,58 @@ export function StatCard({
   delay = 0,
 }: StatCardProps) {
   const variantStyles = {
-    income: "card-income text-income-foreground",
-    expense: "card-expense text-expense-foreground",
-    balance: "card-balance text-balance-foreground",
-    default: "bg-card text-card-foreground border border-border shadow-md",
+    income: "bg-income/15 border border-income/30 text-foreground",
+    expense: "bg-expense/15 border border-expense/30 text-foreground",
+    balance: "bg-balance/15 border border-balance/30 text-foreground",
+    default: "bg-card border border-border text-card-foreground",
+  };
+
+  const iconStyles = {
+    income: "bg-income text-income-foreground",
+    expense: "bg-expense text-expense-foreground",
+    balance: "bg-balance text-balance-foreground",
+    default: "bg-accent text-accent-foreground",
+  };
+
+  const valueStyles = {
+    income: "text-income",
+    expense: "text-expense",
+    balance: "text-balance",
+    default: "text-foreground",
   };
 
   return (
     <div
       className={cn(
-        "rounded-2xl p-6 animate-slide-up",
+        "rounded-xl p-5 animate-slide-up transition-transform duration-300 hover:scale-[1.02] hover:shadow-lg",
         variantStyles[variant],
         className
       )}
       style={{ animationDelay: `${delay}ms` }}
     >
       <div className="flex items-start justify-between">
-        <div className="space-y-1">
-          <p className={cn(
-            "text-sm font-medium",
-            variant === "default" ? "text-muted-foreground" : "opacity-90"
-          )}>
+        <div className="space-y-2">
+          <p className="text-sm font-medium text-muted-foreground">
             {title}
           </p>
-          <p className="text-2xl md:text-3xl font-bold tracking-tight">
+          <p className={cn(
+            "text-2xl md:text-3xl font-bold tracking-tight",
+            valueStyles[variant]
+          )}>
             {value}
           </p>
           {subtitle && (
-            <p className={cn(
-              "text-xs",
-              variant === "default" ? "text-muted-foreground" : "opacity-75"
-            )}>
+            <p className="text-xs text-muted-foreground">
               {subtitle}
             </p>
           )}
         </div>
         {Icon && (
           <div className={cn(
-            "p-3 rounded-xl",
-            variant === "default" ? "bg-accent" : "bg-white/20"
+            "p-2.5 rounded-lg",
+            iconStyles[variant]
           )}>
-            <Icon className="h-6 w-6" />
+            <Icon className="h-5 w-5" />
           </div>
         )}
       </div>

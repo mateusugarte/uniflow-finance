@@ -31,12 +31,12 @@ export default function Dashboard() {
   const dailyBalances = getDailyBalances(year, month);
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 animate-fade-in">
         <div>
-          <h1 className="text-3xl font-bold text-foreground">Dashboard</h1>
-          <p className="text-muted-foreground mt-1">
+          <h1 className="text-2xl font-bold text-foreground">Dashboard</h1>
+          <p className="text-muted-foreground text-sm mt-1">
             Acompanhe suas finanças em tempo real
           </p>
         </div>
@@ -75,14 +75,14 @@ export default function Dashboard() {
       </div>
 
       {/* Chart Section */}
-      <div className="bg-card border border-border rounded-2xl p-6 shadow-md animate-slide-up" style={{ animationDelay: "300ms" }}>
-        <div className="flex items-center gap-3 mb-6">
-          <div className="p-2 rounded-lg bg-accent">
+      <div className="bg-card border border-border rounded-xl p-5 animate-slide-up" style={{ animationDelay: "300ms" }}>
+        <div className="flex items-center gap-3 mb-5">
+          <div className="p-2 rounded-lg bg-primary/20">
             <BarChart3 className="h-5 w-5 text-primary" />
           </div>
           <div>
-            <h2 className="text-lg font-semibold text-foreground">Evolução do Saldo</h2>
-            <p className="text-sm text-muted-foreground">Acompanhe o saldo acumulado dia a dia</p>
+            <h2 className="text-base font-semibold text-foreground">Evolução do Saldo</h2>
+            <p className="text-xs text-muted-foreground">Acompanhe o saldo acumulado dia a dia</p>
           </div>
         </div>
         <BalanceChart data={dailyBalances} />
@@ -120,8 +120,8 @@ export default function Dashboard() {
       </div>
 
       {/* Operations List */}
-      <div className="bg-card border border-border rounded-2xl p-6 shadow-md animate-slide-up" style={{ animationDelay: "600ms" }}>
-        <h2 className="text-lg font-semibold text-foreground mb-4">Operações do Mês</h2>
+      <div className="bg-card border border-border rounded-xl p-5 animate-slide-up" style={{ animationDelay: "600ms" }}>
+        <h2 className="text-base font-semibold text-foreground mb-4">Operações do Mês</h2>
         <OperationsList
           operations={operations}
           onDelete={deleteOperation}

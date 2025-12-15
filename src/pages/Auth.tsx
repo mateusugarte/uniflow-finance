@@ -88,7 +88,6 @@ export default function Auth({ onLogin }: AuthPageProps) {
 
     setIsLoading(true);
     
-    // Simulate API call
     await new Promise((resolve) => setTimeout(resolve, 1000));
     
     toast.success("Login realizado com sucesso!");
@@ -103,7 +102,6 @@ export default function Auth({ onLogin }: AuthPageProps) {
 
     setIsLoading(true);
     
-    // Simulate API call
     await new Promise((resolve) => setTimeout(resolve, 1000));
     
     toast.success("Conta criada com sucesso!");
@@ -114,39 +112,39 @@ export default function Auth({ onLogin }: AuthPageProps) {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-background">
-      <div className="w-full max-w-md">
+      <div className="w-full max-w-md animate-scale-in">
         {/* Logo */}
         <div className="text-center mb-8 animate-fade-in">
-          <div className="w-24 h-24 mx-auto mb-4 rounded-full bg-card border border-border shadow-lg flex items-center justify-center">
+          <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-primary/20 border border-primary/30 flex items-center justify-center">
             <img
               src="/logo.png"
               alt="Uni Capital"
-              className="h-16 w-16 object-contain"
+              className="h-12 w-12 object-contain"
             />
           </div>
           <h1 className="text-xl font-semibold text-foreground">Uni Capital</h1>
         </div>
 
         {/* Auth Card */}
-        <div className="bg-card border border-border rounded-xl p-6 shadow-lg animate-scale-in">
+        <div className="bg-card border border-border rounded-xl p-6 shadow-xl">
           <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as "login" | "signup")}>
             <TabsList className="grid grid-cols-2 mb-6 bg-secondary">
               <TabsTrigger
                 value="login"
-                className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+                className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all duration-200"
               >
                 Entrar
               </TabsTrigger>
               <TabsTrigger
                 value="signup"
-                className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+                className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all duration-200"
               >
                 Criar Conta
               </TabsTrigger>
             </TabsList>
 
             {/* Login Form */}
-            <TabsContent value="login">
+            <TabsContent value="login" className="animate-fade-in">
               <form onSubmit={handleLogin} className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="login-email">Email</Label>
@@ -191,7 +189,7 @@ export default function Auth({ onLogin }: AuthPageProps) {
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
                     >
                       {showPassword ? (
                         <EyeOff className="h-4 w-4" />
@@ -208,7 +206,7 @@ export default function Auth({ onLogin }: AuthPageProps) {
                 <Button
                   type="submit"
                   size="lg"
-                  className="w-full bg-primary hover:bg-primary/90"
+                  className="w-full"
                   disabled={isLoading}
                 >
                   {isLoading ? (
@@ -234,7 +232,7 @@ export default function Auth({ onLogin }: AuthPageProps) {
             </TabsContent>
 
             {/* Signup Form */}
-            <TabsContent value="signup">
+            <TabsContent value="signup" className="animate-fade-in">
               <form onSubmit={handleSignup} className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="signup-name">Nome Completo</Label>
@@ -302,7 +300,7 @@ export default function Auth({ onLogin }: AuthPageProps) {
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
                     >
                       {showPassword ? (
                         <EyeOff className="h-4 w-4" />
@@ -311,14 +309,13 @@ export default function Auth({ onLogin }: AuthPageProps) {
                       )}
                     </button>
                   </div>
-                  {/* Password rules */}
                   {signupData.password && (
                     <div className="grid grid-cols-2 gap-1 mt-2">
                       {passwordRules.map((rule, i) => (
                         <div
                           key={i}
                           className={cn(
-                            "flex items-center gap-1 text-xs",
+                            "flex items-center gap-1 text-xs transition-colors",
                             rule.valid ? "text-income" : "text-muted-foreground"
                           )}
                         >
@@ -362,7 +359,7 @@ export default function Auth({ onLogin }: AuthPageProps) {
                 <Button
                   type="submit"
                   size="lg"
-                  className="w-full bg-primary hover:bg-primary/90"
+                  className="w-full"
                   disabled={isLoading}
                 >
                   {isLoading ? (
