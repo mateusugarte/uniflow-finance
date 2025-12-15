@@ -39,13 +39,14 @@ export default function Dashboard() {
   const dailyBalances = getDailyBalancesByPeriod(periodFilter.startDate, periodFilter.endDate);
 
   const entradas = operations.filter(op => op.tipo === 'entrada');
-  const saidas = operations.filter(op => op.tipo === 'saida');
+  const saidas = operations.filter(op => op.tipo === 'saida' && !op.is_venda);
   const vendas = operations.filter(op => op.tipo === 'saida' && op.is_venda);
+  const totalSaidasSemVendas = saidas.reduce((sum, op) => sum + op.valor, 0);
   const totalVendas = vendas.reduce((sum, op) => sum + op.valor, 0);
 
   const getFilteredOperations = () => {
     if (detailsDialog.type === 'entrada') return entradas;
-    if (detailsDialog.type === 'saida') return saidas;
+    if (detailsDialog.type === 'saida') return saidas; // já filtrado sem vendas
     return [];
   };
 
@@ -86,7 +87,7 @@ export default function Dashboard() {
         >
           <StatCard
             title="Total de Saídas"
-            value={formatCurrency(stats.totalSaidas)}
+            value={formatCurrency(totalSaidasSemVendas)}
             subtitle={`${saidas.length} operações • Clique para ver detalhes`}
             icon={TrendingDown}
             variant="expense"
@@ -204,7 +205,7 @@ export default function Dashboard() {
                 {getFilteredOperations().length} operações
               </span>
               <span className={`font-semibold ${detailsDialog.type === 'entrada' ? 'text-finance-income' : 'text-finance-expense'}`}>
-                Total: {formatCurrency(detailsDialog.type === 'entrada' ? stats.totalEntradas : stats.totalSaidas)}
+                Total: {formatCurrency(detailsDialog.type === 'entrada' ? stats.totalEntradas : totalSaidasSemVendas)}
               </span>
             </div>
           </div>
