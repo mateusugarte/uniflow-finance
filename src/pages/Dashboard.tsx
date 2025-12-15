@@ -11,8 +11,16 @@ import {
   Wallet, 
   Target, 
   PiggyBank,
-  BarChart3
+  BarChart3,
+  X
 } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { OperationItem } from "@/components/dashboard/OperationItem";
 
 export default function Dashboard() {
   const {
@@ -23,10 +31,20 @@ export default function Dashboard() {
   } = useFinance();
 
   const [periodFilter, setPeriodFilter] = useState<PeriodFilterValue>(getDefaultPeriodFilter());
+  const [detailsDialog, setDetailsDialog] = useState<{ open: boolean; type: 'entrada' | 'saida' | null }>({ open: false, type: null });
 
   const stats = getStatsByPeriod(periodFilter.startDate, periodFilter.endDate);
   const operations = getOperationsByPeriod(periodFilter.startDate, periodFilter.endDate);
   const dailyBalances = getDailyBalancesByPeriod(periodFilter.startDate, periodFilter.endDate);
+
+  const entradas = operations.filter(op => op.tipo === 'entrada');
+  const saidas = operations.filter(op => op.tipo === 'saida');
+
+  const getFilteredOperations = () => {
+    if (detailsDialog.type === 'entrada') return entradas;
+    if (detailsDialog.type === 'saida') return saidas;
+    return [];
+  };
 
   return (
     <div className="space-y-6">
@@ -46,22 +64,32 @@ export default function Dashboard() {
 
       {/* Main Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <StatCard
-          title="Total de Entradas"
-          value={formatCurrency(stats.totalEntradas)}
-          subtitle={stats.maiorEntrada ? `Maior: ${stats.maiorEntrada.descricao}` : undefined}
-          icon={TrendingUp}
-          variant="income"
-          delay={0}
-        />
-        <StatCard
-          title="Total de Saídas"
-          value={formatCurrency(stats.totalSaidas)}
-          subtitle={stats.maiorSaida ? `Maior: ${stats.maiorSaida.descricao}` : undefined}
-          icon={TrendingDown}
-          variant="expense"
-          delay={100}
-        />
+        <div 
+          onClick={() => setDetailsDialog({ open: true, type: 'entrada' })}
+          className="cursor-pointer transition-transform hover:scale-[1.02]"
+        >
+          <StatCard
+            title="Total de Entradas"
+            value={formatCurrency(stats.totalEntradas)}
+            subtitle={`${entradas.length} operações • Clique para ver detalhes`}
+            icon={TrendingUp}
+            variant="income"
+            delay={0}
+          />
+        </div>
+        <div 
+          onClick={() => setDetailsDialog({ open: true, type: 'saida' })}
+          className="cursor-pointer transition-transform hover:scale-[1.02]"
+        >
+          <StatCard
+            title="Total de Saídas"
+            value={formatCurrency(stats.totalSaidas)}
+            subtitle={`${saidas.length} operações • Clique para ver detalhes`}
+            icon={TrendingDown}
+            variant="expense"
+            delay={100}
+          />
+        </div>
         <StatCard
           title="Saldo Líquido"
           value={formatCurrency(stats.saldoLiquido)}
@@ -125,6 +153,52 @@ export default function Dashboard() {
           onDelete={deleteOperation}
         />
       </div>
+
+      {/* Details Dialog */}
+      <Dialog open={detailsDialog.open} onOpenChange={(open) => setDetailsDialog({ open, type: open ? detailsDialog.type : null })}>
+        <DialogContent className="max-w-2xl max-h-[80vh] overflow-hidden flex flex-col">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              {detailsDialog.type === 'entrada' ? (
+                <>
+                  <TrendingUp className="h-5 w-5 text-finance-income" />
+                  Detalhes das Entradas
+                </>
+              ) : (
+                <>
+                  <TrendingDown className="h-5 w-5 text-finance-expense" />
+                  Detalhes das Saídas
+                </>
+              )}
+            </DialogTitle>
+          </DialogHeader>
+          <div className="flex-1 overflow-y-auto space-y-2 pr-2">
+            {getFilteredOperations().length === 0 ? (
+              <p className="text-muted-foreground text-center py-8">
+                Nenhuma operação encontrada no período selecionado.
+              </p>
+            ) : (
+              getFilteredOperations().map((operation) => (
+                <OperationItem
+                  key={operation.id}
+                  operation={operation}
+                  onDelete={deleteOperation}
+                />
+              ))
+            )}
+          </div>
+          <div className="pt-4 border-t border-border mt-4">
+            <div className="flex justify-between items-center">
+              <span className="text-sm text-muted-foreground">
+                {getFilteredOperations().length} operações
+              </span>
+              <span className={`font-semibold ${detailsDialog.type === 'entrada' ? 'text-finance-income' : 'text-finance-expense'}`}>
+                Total: {formatCurrency(detailsDialog.type === 'entrada' ? stats.totalEntradas : stats.totalSaidas)}
+              </span>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
