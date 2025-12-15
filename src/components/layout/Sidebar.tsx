@@ -29,11 +29,11 @@ export function Sidebar() {
           className="group" 
           onClick={() => setMobileOpen(false)}
         >
-          <div className="w-18 h-18 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 border border-primary/20 flex items-center justify-center transition-all duration-500 group-hover:scale-110 group-hover:border-primary/40 group-hover:shadow-xl group-hover:shadow-primary/20 overflow-hidden backdrop-blur-sm">
+          <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5 border border-primary/20 flex items-center justify-center transition-all duration-500 group-hover:scale-105 group-hover:border-primary/40 group-hover:shadow-lg group-hover:shadow-primary/20 overflow-hidden backdrop-blur-sm">
             <img 
               src="/logo.png" 
               alt="Logo" 
-              className="w-[180%] h-[180%] object-cover scale-125"
+              className="w-10 h-10 object-contain"
             />
           </div>
         </Link>
