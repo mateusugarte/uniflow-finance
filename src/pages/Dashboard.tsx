@@ -1,8 +1,9 @@
+import { useState } from "react";
 import { useFinance } from "@/contexts/FinanceContext";
 import { StatCard } from "@/components/dashboard/StatCard";
 import { BalanceChart } from "@/components/dashboard/BalanceChart";
 import { OperationsList } from "@/components/dashboard/OperationsList";
-import { MonthSelector } from "@/components/dashboard/MonthSelector";
+import { PeriodFilter, PeriodFilterValue, getDefaultPeriodFilter } from "@/components/dashboard/PeriodFilter";
 import { formatCurrency, formatPercent } from "@/lib/format";
 import { 
   TrendingUp, 
@@ -15,20 +16,17 @@ import {
 
 export default function Dashboard() {
   const {
-    selectedMonth,
-    setSelectedMonth,
-    getMonthlyStats,
-    getOperationsByMonth,
-    getDailyBalances,
+    getStatsByPeriod,
+    getOperationsByPeriod,
+    getDailyBalancesByPeriod,
     deleteOperation,
   } = useFinance();
 
-  const year = selectedMonth.getFullYear();
-  const month = selectedMonth.getMonth();
+  const [periodFilter, setPeriodFilter] = useState<PeriodFilterValue>(getDefaultPeriodFilter());
 
-  const stats = getMonthlyStats(year, month);
-  const operations = getOperationsByMonth(year, month);
-  const dailyBalances = getDailyBalances(year, month);
+  const stats = getStatsByPeriod(periodFilter.startDate, periodFilter.endDate);
+  const operations = getOperationsByPeriod(periodFilter.startDate, periodFilter.endDate);
+  const dailyBalances = getDailyBalancesByPeriod(periodFilter.startDate, periodFilter.endDate);
 
   return (
     <div className="space-y-6">
@@ -40,9 +38,9 @@ export default function Dashboard() {
             Acompanhe suas finanças em tempo real
           </p>
         </div>
-        <MonthSelector
-          selectedMonth={selectedMonth}
-          onMonthChange={setSelectedMonth}
+        <PeriodFilter
+          value={periodFilter}
+          onChange={setPeriodFilter}
         />
       </div>
 
@@ -99,7 +97,7 @@ export default function Dashboard() {
         <StatCard
           title="Total de Operações"
           value={stats.totalOperacoes.toString()}
-          subtitle="neste mês"
+          subtitle="no período"
           icon={BarChart3}
           delay={450}
         />
@@ -121,7 +119,7 @@ export default function Dashboard() {
 
       {/* Operations List */}
       <div className="bg-card border border-border rounded-xl p-5 animate-slide-up" style={{ animationDelay: "600ms" }}>
-        <h2 className="text-base font-semibold text-foreground mb-4">Operações do Mês</h2>
+        <h2 className="text-base font-semibold text-foreground mb-4">Operações do Período</h2>
         <OperationsList
           operations={operations}
           onDelete={deleteOperation}
