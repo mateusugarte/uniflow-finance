@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -7,13 +6,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Loader2, Mail, Lock, User, Eye, EyeOff, Check, X } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/contexts/AuthContext";
 
-interface AuthPageProps {
-  onLogin: () => void;
-}
-
-export default function Auth({ onLogin }: AuthPageProps) {
-  const navigate = useNavigate();
+export default function Auth() {
+  const { signIn, signUp } = useAuth();
   const [activeTab, setActiveTab] = useState<"login" | "signup">("login");
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -84,11 +80,18 @@ export default function Auth({ onLogin }: AuthPageProps) {
     if (!validateLogin()) return;
 
     setIsLoading(true);
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    toast.success("Login realizado com sucesso!");
+    const { error } = await signIn(loginData.email, loginData.password);
+    
+    if (error) {
+      if (error.message.includes("Invalid login credentials")) {
+        toast.error("Email ou senha incorretos");
+      } else {
+        toast.error(error.message);
+      }
+    } else {
+      toast.success("Login realizado com sucesso!");
+    }
     setIsLoading(false);
-    onLogin();
-    navigate("/dashboard");
   };
 
   const handleSignup = async (e: React.FormEvent) => {
@@ -96,11 +99,18 @@ export default function Auth({ onLogin }: AuthPageProps) {
     if (!validateSignup()) return;
 
     setIsLoading(true);
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    toast.success("Conta criada com sucesso!");
+    const { error } = await signUp(signupData.email, signupData.password, signupData.name);
+    
+    if (error) {
+      if (error.message.includes("User already registered")) {
+        toast.error("Este email já está cadastrado");
+      } else {
+        toast.error(error.message);
+      }
+    } else {
+      toast.success("Conta criada com sucesso! Verifique seu email.");
+    }
     setIsLoading(false);
-    onLogin();
-    navigate("/dashboard");
   };
 
   return (
@@ -108,15 +118,13 @@ export default function Auth({ onLogin }: AuthPageProps) {
       <div className="w-full max-w-sm sm:max-w-md animate-scale-in">
         {/* Logo */}
         <div className="text-center mb-6 sm:mb-8 animate-fade-in">
-          <div className="w-28 h-28 sm:w-32 sm:h-32 mx-auto mb-4 rounded-full bg-primary/20 border-2 border-primary/40 flex items-center justify-center shadow-lg shadow-primary/20">
+          <div className="w-32 h-32 sm:w-40 sm:h-40 mx-auto mb-4 rounded-full bg-primary/20 border-2 border-primary/40 flex items-center justify-center shadow-lg shadow-primary/20 overflow-hidden">
             <img
               src="/logo.png"
-              alt="Uni Capital"
-              className="h-20 w-20 sm:h-24 sm:w-24 object-contain"
+              alt="Logo"
+              className="h-28 w-28 sm:h-36 sm:w-36 object-contain"
             />
           </div>
-          <h1 className="text-xl sm:text-2xl font-bold text-foreground">Uni Capital</h1>
-          <p className="text-sm text-muted-foreground mt-1">Organize suas finanças</p>
         </div>
 
         {/* Auth Card */}
