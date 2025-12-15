@@ -56,6 +56,7 @@ export function FinanceProvider({ children }: { children: ReactNode }) {
         banco: op.banco,
         data: op.data,
         hora: op.hora,
+        is_venda: op.is_venda ?? false,
         created_at: op.created_at,
         updated_at: op.updated_at,
       }));
@@ -89,6 +90,7 @@ export function FinanceProvider({ children }: { children: ReactNode }) {
         banco: data.banco,
         data: data.data,
         hora: data.hora,
+        is_venda: data.is_venda ?? false,
       });
 
       if (error) throw error;

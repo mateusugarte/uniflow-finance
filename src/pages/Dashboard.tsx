@@ -12,7 +12,8 @@ import {
   Target, 
   PiggyBank,
   BarChart3,
-  X
+  X,
+  ShoppingBag
 } from "lucide-react";
 import {
   Dialog,
@@ -39,6 +40,8 @@ export default function Dashboard() {
 
   const entradas = operations.filter(op => op.tipo === 'entrada');
   const saidas = operations.filter(op => op.tipo === 'saida');
+  const vendas = operations.filter(op => op.tipo === 'saida' && op.is_venda);
+  const totalVendas = vendas.reduce((sum, op) => sum + op.valor, 0);
 
   const getFilteredOperations = () => {
     if (detailsDialog.type === 'entrada') return entradas;
@@ -63,7 +66,7 @@ export default function Dashboard() {
       </div>
 
       {/* Main Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <div 
           onClick={() => setDetailsDialog({ open: true, type: 'entrada' })}
           className="cursor-pointer transition-transform hover:scale-[1.02]"
@@ -90,6 +93,14 @@ export default function Dashboard() {
             delay={100}
           />
         </div>
+        <StatCard
+          title="Vendas"
+          value={formatCurrency(totalVendas)}
+          subtitle={`${vendas.length} vendas no período`}
+          icon={ShoppingBag}
+          variant="sales"
+          delay={150}
+        />
         <StatCard
           title="Saldo Líquido"
           value={formatCurrency(stats.saldoLiquido)}

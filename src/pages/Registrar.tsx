@@ -5,6 +5,7 @@ import { OperationType, BANCOS } from "@/types/finance";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Select,
   SelectContent,
@@ -12,7 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ArrowUpCircle, ArrowDownCircle, ArrowLeft, Loader2, Check } from "lucide-react";
+import { ArrowUpCircle, ArrowDownCircle, ArrowLeft, Loader2, Check, ShoppingBag } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 
@@ -28,6 +29,7 @@ export default function Registrar() {
     banco: "",
     data: format(new Date(), "yyyy-MM-dd"),
     hora: format(new Date(), "HH:mm"),
+    isVenda: false,
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
 
@@ -74,6 +76,7 @@ export default function Registrar() {
       banco: formData.banco,
       data: formData.data,
       hora: formData.hora,
+      is_venda: tipo === 'saida' ? formData.isVenda : false,
     });
 
     // Reset form
@@ -85,6 +88,7 @@ export default function Registrar() {
       banco: "",
       data: format(new Date(), "yyyy-MM-dd"),
       hora: format(new Date(), "HH:mm"),
+      isVenda: false,
     });
   };
 
@@ -292,6 +296,29 @@ export default function Registrar() {
                 />
               </div>
             </div>
+
+            {/* Checkbox Venda - apenas para saídas */}
+            {tipo === 'saida' && (
+              <div className="flex items-center space-x-3 p-4 rounded-xl bg-orange-500/10 border border-orange-500/30">
+                <Checkbox
+                  id="isVenda"
+                  checked={formData.isVenda}
+                  onCheckedChange={(checked) =>
+                    setFormData({ ...formData, isVenda: checked === true })
+                  }
+                  className="border-orange-500 data-[state=checked]:bg-orange-500 data-[state=checked]:border-orange-500"
+                />
+                <div className="flex items-center gap-2">
+                  <ShoppingBag className="h-4 w-4 text-orange-500" />
+                  <Label
+                    htmlFor="isVenda"
+                    className="text-sm font-medium text-foreground cursor-pointer"
+                  >
+                    Esta saída é uma venda
+                  </Label>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Submit Buttons */}

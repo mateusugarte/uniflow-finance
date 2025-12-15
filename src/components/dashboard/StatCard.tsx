@@ -6,7 +6,7 @@ interface StatCardProps {
   value: string;
   subtitle?: string;
   icon?: LucideIcon;
-  variant?: "income" | "expense" | "balance" | "default";
+  variant?: "income" | "expense" | "balance" | "sales" | "default";
   className?: string;
   delay?: number;
 }
@@ -24,6 +24,7 @@ export function StatCard({
     income: "bg-income/5 border border-income/20",
     expense: "bg-expense/5 border border-expense/20",
     balance: "bg-primary/5 border border-primary/20",
+    sales: "bg-orange-500/5 border border-orange-500/20",
     default: "bg-card border border-border/50",
   };
 
@@ -31,6 +32,7 @@ export function StatCard({
     income: "bg-income/10 text-income",
     expense: "bg-expense/10 text-expense",
     balance: "bg-primary/10 text-primary",
+    sales: "bg-orange-500/10 text-orange-500",
     default: "bg-muted/50 text-muted-foreground",
   };
 
@@ -38,6 +40,7 @@ export function StatCard({
     income: "text-income",
     expense: "text-expense",
     balance: "text-primary",
+    sales: "text-orange-500",
     default: "text-foreground",
   };
 
