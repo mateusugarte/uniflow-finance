@@ -23,7 +23,7 @@ export function Header({ onLogout }: HeaderProps) {
           {/* Logo */}
           <Link to="/dashboard" className="flex items-center gap-3 group">
             <img 
-              src="/logo.png" 
+              src="/logo.jpeg" 
               alt="Uni Capital" 
               className="h-10 w-auto transition-transform duration-300 group-hover:scale-105"
             />
