@@ -59,11 +59,11 @@ export default function Auth() {
       <div className="w-full max-w-sm sm:max-w-md animate-scale-in">
         {/* Logo */}
         <div className="text-center mb-6 sm:mb-8 animate-fade-in">
-          <div className="w-32 h-32 sm:w-40 sm:h-40 mx-auto mb-4 rounded-full bg-primary/20 border-2 border-primary/40 flex items-center justify-center shadow-lg shadow-primary/20 overflow-hidden">
+          <div className="w-32 h-32 sm:w-40 sm:h-40 mx-auto mb-4 rounded-full bg-primary/10 border-2 border-primary/30 flex items-center justify-center shadow-lg shadow-primary/10 overflow-hidden">
             <img
-              src="/logo.png"
+              src="/logo.jpeg"
               alt="Logo"
-              className="h-28 w-28 sm:h-36 sm:w-36 object-contain"
+              className="w-full h-full object-cover"
             />
           </div>
         </div>
