@@ -258,11 +258,16 @@
   background: hsl(225 15% 35%);
 }
 
-/* Smooth transitions - optimized */
-* {
+/* Smooth transitions - only for interactive elements */
+button,
+a,
+input,
+select,
+textarea,
+[role="button"] {
   transition-property: background-color, border-color, color, opacity, transform, box-shadow;
   transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
-  transition-duration: 200ms;
+  transition-duration: 150ms;
 }
 
 /* Remove transition from animations */
