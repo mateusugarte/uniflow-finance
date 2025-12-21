@@ -230,7 +230,7 @@
   }
 }
 
-/* Scrollbar styling */
+/* Scrollbar styling - Light theme */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -247,6 +247,15 @@
 
 ::-webkit-scrollbar-thumb:hover {
   background: hsl(220 15% 70%);
+}
+
+/* Scrollbar styling - Dark theme */
+.dark ::-webkit-scrollbar-thumb {
+  background: hsl(225 15% 25%);
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: hsl(225 15% 35%);
 }
 
 /* Smooth transitions - optimized */

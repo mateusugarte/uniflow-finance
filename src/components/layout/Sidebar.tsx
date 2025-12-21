@@ -1,10 +1,11 @@
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { LayoutDashboard, PlusCircle, History, LogOut, Menu, X, User, ChevronDown, Check } from "lucide-react";
+import { LayoutDashboard, PlusCircle, History, LogOut, Menu, X, User, ChevronDown, Check, Sun, Moon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useUserSwitch } from "@/contexts/UserSwitchContext";
+import { useTheme } from "@/hooks/use-theme";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -24,6 +25,7 @@ export function Sidebar() {
   const location = useLocation();
   const { signOut } = useAuth();
   const { selectedUserProfile, allUsers, switchUser, selectedUserId } = useUserSwitch();
+  const { theme, toggleTheme } = useTheme();
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const handleLogout = async () => {
@@ -163,7 +165,25 @@ export function Sidebar() {
             </DropdownMenuContent>
           </DropdownMenu>
 
-          <div className="mx-2 mb-4 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
+          <div className="mx-2 mb-3 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
+          
+          {/* Theme Toggle */}
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={toggleTheme}
+            className="w-full justify-start text-muted-foreground hover:text-foreground hover:bg-accent/50 rounded-xl py-3 mb-2 transition-all duration-300"
+          >
+            {theme === "light" ? (
+              <Moon className="h-4 w-4 mr-3" />
+            ) : (
+              <Sun className="h-4 w-4 mr-3" />
+            )}
+            <span className="tracking-wide">
+              {theme === "light" ? "Tema Escuro" : "Tema Claro"}
+            </span>
+          </Button>
+
           <Button
             variant="ghost"
             size="sm"
