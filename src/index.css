@@ -6,54 +6,54 @@
 
 @layer base {
   :root {
-    /* Refined dark theme - deeper and more sophisticated */
-    --primary: 220 70% 55%;
+    /* Light theme - clean and modern */
+    --primary: 220 70% 50%;
     --primary-foreground: 0 0% 100%;
     
-    --background: 225 30% 6%;
-    --foreground: 220 15% 95%;
+    --background: 0 0% 98%;
+    --foreground: 220 20% 15%;
     
-    --card: 225 25% 9%;
-    --card-foreground: 220 15% 95%;
+    --card: 0 0% 100%;
+    --card-foreground: 220 20% 15%;
     
-    --popover: 225 25% 9%;
-    --popover-foreground: 220 15% 95%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 20% 15%;
     
-    --secondary: 225 20% 12%;
-    --secondary-foreground: 220 15% 95%;
+    --secondary: 220 15% 94%;
+    --secondary-foreground: 220 20% 15%;
     
-    --muted: 225 15% 15%;
-    --muted-foreground: 220 10% 50%;
+    --muted: 220 15% 92%;
+    --muted-foreground: 220 10% 45%;
     
-    --accent: 225 20% 14%;
-    --accent-foreground: 220 15% 95%;
+    --accent: 220 15% 94%;
+    --accent-foreground: 220 20% 15%;
     
-    /* Finance Colors - refined */
-    --income: 160 60% 42%;
+    /* Finance Colors - refined for light mode */
+    --income: 160 60% 38%;
     --income-foreground: 0 0% 100%;
-    --expense: 0 60% 50%;
+    --expense: 0 65% 50%;
     --expense-foreground: 0 0% 100%;
-    --balance: 220 70% 55%;
+    --balance: 220 70% 50%;
     --balance-foreground: 0 0% 100%;
     
-    --destructive: 0 60% 50%;
+    --destructive: 0 65% 50%;
     --destructive-foreground: 0 0% 100%;
     
-    --border: 225 15% 15%;
-    --input: 225 15% 15%;
-    --ring: 220 70% 55%;
+    --border: 220 15% 88%;
+    --input: 220 15% 88%;
+    --ring: 220 70% 50%;
     
     --radius: 0.875rem;
     
-    /* Sidebar - glass effect */
-    --sidebar-background: 225 30% 5%;
-    --sidebar-foreground: 220 15% 95%;
-    --sidebar-primary: 220 70% 55%;
+    /* Sidebar - light theme */
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 220 20% 15%;
+    --sidebar-primary: 220 70% 50%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 225 20% 12%;
-    --sidebar-accent-foreground: 220 15% 95%;
-    --sidebar-border: 225 15% 12%;
-    --sidebar-ring: 220 70% 55%;
+    --sidebar-accent: 220 15% 94%;
+    --sidebar-accent-foreground: 220 20% 15%;
+    --sidebar-border: 220 15% 90%;
+    --sidebar-ring: 220 70% 50%;
   }
 
   .dark {
@@ -241,12 +241,12 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: hsl(225 15% 20%);
+  background: hsl(220 15% 80%);
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: hsl(225 15% 30%);
+  background: hsl(220 15% 70%);
 }
 
 /* Smooth transitions - optimized */
