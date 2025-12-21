@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 import { FinanceProvider } from "@/contexts/FinanceContext";
 import { UserSwitchProvider } from "@/contexts/UserSwitchContext";
+import { ThemeProvider } from "@/hooks/use-theme";
 import { AppLayout } from "@/components/layout/AppLayout";
 import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
@@ -91,19 +92,21 @@ function AppRoutes() {
 const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <AuthProvider>
-          <UserSwitchProvider>
-            <FinanceProvider>
-              <Toaster />
-              <Sonner position="top-right" richColors />
-              <BrowserRouter>
-                <AppRoutes />
-              </BrowserRouter>
-            </FinanceProvider>
-          </UserSwitchProvider>
-        </AuthProvider>
-      </TooltipProvider>
+      <ThemeProvider>
+        <TooltipProvider>
+          <AuthProvider>
+            <UserSwitchProvider>
+              <FinanceProvider>
+                <Toaster />
+                <Sonner position="top-right" richColors />
+                <BrowserRouter>
+                  <AppRoutes />
+                </BrowserRouter>
+              </FinanceProvider>
+            </UserSwitchProvider>
+          </AuthProvider>
+        </TooltipProvider>
+      </ThemeProvider>
     </QueryClientProvider>
   );
 };
